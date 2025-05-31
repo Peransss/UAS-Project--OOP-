@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <title>Inforku - Informatika Jadi Lebih Mematikan</title>
+  <style>
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">Inforku</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Fitur</a>
+      <a href="#">Testimoni</a>
+      <a href="#">Bantuan</a>
+    </div>
+    <button class="login-btn">Masuk</button>
+    <button class="login-btn">Daftar</button>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero-text">
+    <h1>Informatika Jadi Lebih Mematikan</h1>
+    <p>Dapatkan akses ke ribuan video pembelajaran, latihan soal, dan mentor terbaik hanya di Inforku.</p>
+    <form id="pilihanForm" style="margin-bottom: 20px;">
+      <div class="custom-form-group">
+        <label for="semester">Semester</label>
+        <select id="semester" name="semester">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+      <div class="custom-form-group">
+        <label for="matkul">Pilih Mata Kuliah</label>
+        <select id="matkul" name="matkul">
+          <!-- Akan diisi oleh JS -->
+        </select>
+      </div>
+      <button type="submit">Pilih</button>
+    </form>
+    <button class="mulai-btn">Mulai Belajar</button>
+    <div class="result-info" id="resultInfo"></div>
+  </div>
+
+  <!-- Fitur Section -->
+  <section class="fitur-section" id="fitur">
+    <div class="fitur-title">Fitur Unggulan Inforku</div>
+    <div class="fitur-list">
+      <div class="fitur-card">
+        <div class="fitur-icon">🎥</div>
+        <h3>Video Pembelajaran Interaktif</h3>
+        <p>Belajar jadi lebih mudah dengan video yang menarik dan mudah dipahami.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">📝</div>
+        <h3>Latihan Soal & Pembahasan</h3>
+        <p>Ribuan soal latihan lengkap dengan pembahasan untuk mengasah kemampuanmu.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">👨‍🏫</div>
+        <h3>Mentor Profesional</h3>
+        <p>Dibimbing oleh mentor berpengalaman di bidang Informatika dan Teknologi.</p>
+      </div>
+      <div class="fitur-card">
+        <div class="fitur-icon">📱</div>
+        <h3>Akses Fleksibel</h3>
+        <p>Bisa belajar kapan saja dan di mana saja lewat berbagai perangkat.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimoni Section -->
+  <section class="testimoni-section" id="testimoni">
+    <div class="testimoni-title">Apa Kata Mereka?</div>
+    <div class="testimoni-list">
+      <div class="testimoni-card">
+        <div class="user">
+          <div class="avatar">A</div>
+          <div class="name">Andi, Mahasiswa</div>
+        </div>
+        <div class="desc">Materi dan soal di Inforku sangat membantu persiapan ujian. Penjelasannya mudah dipahami!</div>
+      </div>
+      <div class="testimoni-card">
+        <div class="user">
+          <div class="avatar">B</div>
+          <div class="name">Bella, Mahasiswi</div>
+        </div>
+        <div class="desc">Mentornya responsif dan ramah. Aku jadi lebih percaya diri menghadapi tugas-tugas kuliah.</div>
+      </div>
+      <div class="testimoni-card">
+        <div class="user">
+          <div class="avatar">C</div>
+          <div class="name">Candra, Alumni</div>
+        </div>
+        <div class="desc">Fitur latihan soal dan video pembelajaran sangat lengkap. Recommended banget!</div>
+      </div>
+    </div>
+  </section>
+  <script src="main.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const btns = document.querySelectorAll('.navbar .login-btn');
+    if (btns.length >= 2) {
+      btns[0].addEventListener('click', function() {
+        window.location.href = "login.html";
+      });
+      btns[1].addEventListener('click', function() {
+        window.location.href = "register.html";
+      });
+    }
+  });
+</script>
+</body>
+</html>
