@@ -21,6 +21,10 @@ class App_Kursus:
         def index():
             return render_template('Main_page.html')
 
+        @self.app.route('/login/', methods=['GET', 'POST'])
+        def login():
+            return render_template('login.html')
+
     def run(self):
         self.app.run(debug=True)
 
