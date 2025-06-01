@@ -72,6 +72,24 @@
     .navbar .login-btn:hover {
       background: linear-gradient(90deg, #007bff 60%, #0053b8 100%);
     }
+    .register-container {
+      background: #fff;
+      padding: 40px 32px 32px 32px;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,83,184,0.10);
+      max-width: 420px;
+      margin: 64px auto 0 auto;
+      text-align: center;
+      position: sticky;  
+    }
+    .register-container h2 {
+      color: #0053b8;
+      margin-top: 0px;
+      margin-bottom: 30px;
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
     .login-container {
       background: #fff;
       padding: 40px 32px 32px 32px;
@@ -123,6 +141,20 @@
       cursor: pointer;
       transition: background 0.2s;
       margin-bottom: 15px;
+      margin-top: 3px;
+    }
+    #registerForm .register-btn {
+      background: linear-gradient(90deg, #0053b8 60%, #007bff 100%);
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 15px;
+      margin-top: 3px;
     }
     .form-group {
       margin-bottom: 18px;
