@@ -36,26 +36,35 @@ class App_Kursus:
 
         @self.app.route('/login/process', methods=['GET', 'POST'])
         def loginProcess():
-            username = request.form['username']
-            password = request.form['password']
-            data = query_db(username, password)
-            if data:
-                flash('Login successful!', 'success')
-                return redirect(url_for('index'))
-            else:
-                flash('Wrong username/password. Please check again!', 'failed')                
+            if request.method == 'POST':
+                username = request.form['username']
+                password = request.form['password']
+                data = query_db(username, password)
+                if data:
+                    flash('Login successful!', 'success')
+                    return redirect(url_for('index'))
+                else:
+                    flash('Wrong username/password. Please check again!', 'failed')                
 
         @self.app.route('/register/')
-        def regiester():
+        def register():
             return render_template('register.html')
 
         @self.app.route('/register/process', methods=['POST'])
         def registerProcess():
             if request.method == 'POST':
+                full_name = request.form['full_name']
                 username = request.form['username']
                 password = request.form['password']
-                flash('Registration successful!', 'success')
-            return redirect(url_for('login'))
+                cur = self.con.mysql.cursor()
+                try:
+                    cur.execute('INSERT INTO users (full_name, username, password) VALUES (%s, %s, md5(%s))', (full_name, username, password))
+                    self.con.mysql.commit()
+                    flash('Registration successful!', 'success')
+                except Exception as e:
+                    flash('Registration failed'+ str({e}), 'error')
+                cur.close()
+                return redirect(url_for('login'))
 
     def run(self):
         self.app.run(debug=True)

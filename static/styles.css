@@ -72,6 +72,16 @@
     .navbar .login-btn:hover {
       background: linear-gradient(90deg, #007bff 60%, #0053b8 100%);
     }
+    .flash-alert p {
+      background: #fff;
+      padding: 40px 32px 32px 32px;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,83,184,0.10);
+      max-width: 420px;
+      margin: 64px auto 0 auto;
+      text-align: center;
+      position: sticky;  
+    }
     .register-container {
       background: #fff;
       padding: 40px 32px 32px 32px;
@@ -181,7 +191,6 @@
       border: 2px solid #0053b8;
       outline: none;
     }
-
     .custom-form-group {
       margin-bottom: 18px;
       text-align: left;
