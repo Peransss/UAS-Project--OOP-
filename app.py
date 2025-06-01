@@ -25,6 +25,15 @@ class App_Kursus:
         def login():
             return render_template('login.html')
 
+        @self.app.route('/register/', methods=['GET', 'POST'])
+        def register():
+            if request.method == 'POST':
+                username = request.form['username']
+                password = request.form['password']
+                flash('Registration successful!', 'success')
+                return redirect(url_for('login'))
+            return render_template('register.html')
+
     def run(self):
         self.app.run(debug=True)
 
