@@ -20,10 +20,12 @@
     .navbar .logo {
       font-size: 1.5rem;
       font-weight: 800;
+      margin-bottom: 4px;
       color: #0053b8;
       letter-spacing: 1px;
       display: flex;
       align-items: center;
+      margin-right: 30px;
     }
     .navbar .nav-links {
       display: flex;
@@ -42,6 +44,19 @@
       color: #007bff;
       border-bottom: 2px solid #007bff;
     }
+    .nav-left {
+      display: flex;
+      align-items: center;
+    }
+    .nav-right {
+      display: flex;
+      gap: 10px;
+    }
+    .auth-buttons {
+      display: flex;
+      gap: 0px; 
+      align-items: center;
+    } 
     .navbar .login-btn {
       background: linear-gradient(90deg, #0053b8 60%, #007bff 100%);
       color: #fff;
