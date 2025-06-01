@@ -9,13 +9,24 @@
   </style>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">Inforku</div>
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Fitur</a>
+        <a href="#">Testimoni</a>
+        <a href="#">Bantuan</a>
+      </div>
+    </div>
+  </nav>
   <div class="login-container">
     <h2>Masuk ke Inforku</h2>
     <div class="error-msg" id="loginError"></div>
     <form id="loginForm" autocomplete="off">
       <div class="form-group">
-        <label for="loginEmail">Email</label>
-        <input type="email" id="loginEmail" name="email" required>
+        <label for="loginUsername">Username</label>
+        <input type="username" id="loginUsername" name="username" required>
       </div>
       <div class="form-group">
         <label for="loginPassword">Kata Sandi</label>
@@ -29,11 +40,11 @@
     // Simulasi login sederhana (tanpa backend)
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value;
+      const username = document.getElementById('loginUsername').value;
       const password = document.getElementById('loginPassword').value;
       const errorMsg = document.getElementById('loginError');
       // Simulasi validasi
-      if (email === "" || password === "") {
+      if (username === "" || password === "") {
         errorMsg.textContent = "Email dan kata sandi wajib diisi.";
         errorMsg.style.display = "block";
       } else {
@@ -42,6 +53,6 @@
         // window.location.href = "Untitled-1.html"; // redirect ke halaman utama
       }
     });
-  </script>
+  </script> 
 </body>
 </html>
