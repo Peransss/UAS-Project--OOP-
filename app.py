@@ -66,6 +66,14 @@ class App_Kursus:
                 cur.close()
                 return redirect(url_for('login'))
 
+        @self.app.route('/main')
+        def main_page():
+            return render_template('Main_page.html')
+
+        @self.app.route('/bantuan')
+        def bantuan():
+            return render_template('bantuan.html')
+
     def run(self):
         self.app.run(debug=True)
 
