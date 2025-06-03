@@ -44,7 +44,7 @@ class App_Kursus:
                     flash('Login successful!', 'success')
                     return redirect(url_for('index'))
                 else:
-                    flash('Wrong username/password. Please check again!', 'error')                
+                    flash('Wrong username/password. Please check again!', 'failed')                
 
         @self.app.route('/register/')
         def register():
