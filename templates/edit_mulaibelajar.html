@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Mata Kuliah</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    /* styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #555;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+a {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Edit Mata Kuliah</h1>
+    <form method="POST">
+      <label for="name">Nama Mata Kuliah:</label>
+      <input type="text" id="name" name="name" value="{{ course.name }}" required>
+
+      <label for="description">Deskripsi:</label>
+      <textarea id="description" name="description" rows="4" required>{{ course.description }}</textarea>
+
+      <label for="materials">Materi (JSON):</label>
+      <textarea id="materials" name="materials" rows="4" required>{{ course.materials }}</textarea>
+
+      <label for="videos">Video (JSON):</label>
+      <textarea id="videos" name="videos" rows="4" required>{{ course.videos }}</textarea>
+
+      <button type="submit">Simpan Perubahan</button>
+    </form>
+    <a href="{{ url_for('view_courses') }}">← Kembali ke Daftar Mata Kuliah</a>
+  </div>
+</body>
+</html>

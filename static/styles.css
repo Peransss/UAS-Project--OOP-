@@ -455,3 +455,280 @@
   background: #D43D64;
 }
 
+/*Mulai Belajar*/
+    /* Container */
+.container {
+  max-width: 1100px;
+  min-height: 96vh;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.10);
+  box-sizing: border-box;
+}
+
+/* Main Title */
+#mainTitle {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #2a3b6d;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* Matkul Box */
+.matkul-box {
+  margin: 28px auto 24px auto;
+  padding: 22px 18px;
+  background: #f8faff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  text-align: left;
+  border-left: 5px solid #007bff;
+  max-width: 700px;
+}
+
+#matkulTitle {
+  color: #007bff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+/* Matkul Navigation */
+.matkul-nav {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+  margin-top: 10px;
+}
+
+.matkul-nav a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 7px 18px;
+  border-radius: 7px;
+  background: #eaf3ff;
+  border: 1px solid #d0e5ff;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.04);
+}
+
+.matkul-nav a:hover,
+.matkul-nav a:focus {
+  background: #007bff;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.10);
+}
+
+.matkul-nav a:last-child {
+  margin-left: auto;
+  background: #ffefef;
+  color: #d32f2f;
+  border: 1px solid #ffd6d6;
+  font-weight: 600;
+}
+
+/* Section Box */
+.section-box {
+  margin: 32px 0;
+  padding: 26px 22px;
+  background: #f4f7fb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  text-align: left;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-box h2 {
+  margin-top: 0;
+  color: #007bff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Materi & Video List */
+.materi-list,
+.video-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.materi-item,
+.video-item {
+  flex: 1 1 260px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.05);
+  border: 1.5px solid #e3eafc;
+  transition: box-shadow 0.2s, border 0.2s;
+  padding: 16px 18px;
+  margin-bottom: 0;
+  cursor: pointer;
+  position: relative;
+  min-width: 220px;
+}
+
+.materi-item:hover,
+.video-item:hover {
+  border: 1.5px solid #007bff;
+  box-shadow: 0 4px 16px rgba(0, 123, 255, 0.10);
+  background: #f0f7ff;
+}
+
+.materi-item .icon,
+.video-item .icon {
+  font-size: 1.5rem;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.materi-item-title,
+.video-item-title {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: #2a3b6d;
+  display: inline;
+}
+
+/* Detail Popups */
+#materiDetail,
+#videoDetail {
+  display: none;
+  margin-top: 18px;
+  background: #fffbe7;
+  padding: 22px 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.08);
+  position: relative;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 10;
+}
+
+#videoDetail {
+  background: #e7f7ff;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.08);
+}
+
+#materiJudul,
+#videoJudul {
+  color: #007bff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#materiIsi {
+  color: #333;
+  margin-bottom: 12px;
+}
+
+#materiPdf,
+#videoDownload {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 7px 20px;
+  background: #007bff;
+  color: #fff;
+  border-radius: 7px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+#materiPdf:hover,
+#videoDownload:hover {
+  background: #0056b3;
+}
+
+.close-btn {
+  margin-left: 18px;
+  background: #f8d7da;
+  color: #d32f2f;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.close-btn:hover {
+  background: #f5bcbc;
+}
+
+/* Komentar */
+#komentar {
+  background: #f8faff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#komentar textarea {
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+#komentar button[type="submit"] {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 24px;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+#komentar button[type="submit"]:hover {
+  background: #0056b3;
+}
+
+#komentar ul {
+  margin-top: 10px;
+}
+
+#komentar li {
+  background: #f4f7fb;
+  border-radius: 7px;
+  padding: 8px 14px;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+  .container,
+  .section-box,
+  #komentar {
+    padding: 10px 4vw;
+  }
+
+  .materi-list,
+  .video-list {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .materi-item,
+  .video-item {
+    min-width: 0;
+  }
+}

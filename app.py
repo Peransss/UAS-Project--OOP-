@@ -1,36 +1,6 @@
 from flask import  Flask, flash, redirect, render_template, request, url_for, session
 from config import Config
 
-class MataKuliah:
-    def __init__(self, nama, deskripsi, materi, video_url):
-        self.nama = nama
-        self.deskripsi = deskripsi
-        self.materi = materi  # list of string
-        self.video_url = video_url
-
-# Data matkul
-matkul_dict = {
-    "Struktur Data": MataKuliah(
-        "Struktur Data",
-        "Struktur Data membahas cara menyimpan, mengelola, dan memproses data secara efisien.",
-        ["Array & Linked List", "Stack & Queue", "Tree & Graph"],
-        "https://www.youtube.com/embed/1OEu9C51K2A"
-    ),
-    "Aljabar Linier": MataKuliah(
-        "Aljabar Linier",
-        "Aljabar Linier mempelajari vektor, matriks, dan transformasi linier.",
-        ["Vektor & Matriks", "SPL", "Transformasi Linier"],
-        "https://www.youtube.com/embed/2OEu9C51K2B"
-    ),
-    "Pemrograman Dasar": MataKuliah(
-        "Pemrograman Dasar",
-        "Pemrograman Dasar mengenalkan konsep dasar pemrograman komputer.",
-        ["Variabel & Tipe Data", "Percabangan & Perulangan", "Fungsi"],
-        "https://www.youtube.com/embed/3OEu9C51K2C"
-    ),
-    # Tambahkan matkul lain sesuai kebutuhan
-}
-
 class App_Kursus:
     def __init__(self):
         self.app = Flask(__name__)
@@ -163,7 +133,6 @@ class App_Kursus:
             flash('You have been logged out.', 'info')
             return redirect(url_for('login'))
 
-        # Python
         @self.app.route('/courses/view')
         def view_courses():
             if 'user_id' in session:
@@ -184,7 +153,7 @@ class App_Kursus:
                         return redirect(url_for('login'))
 
                     courses = cur.fetchall()
-                    return render_template('courses.html', courses=courses, role=user_role)
+                    return render_template('mulaibelajar.html', courses=courses, role=user_role)
                 except Exception as e:
                     flash(f"Error fetching courses: {e}", "error")
                     return redirect(url_for('index'))
@@ -240,7 +209,7 @@ class App_Kursus:
                             return redirect(url_for('login'))
 
                         courses = cur.fetchall()
-                        return render_template('edit_courses.html', courses=courses, role=user_role)
+                        return render_template('edit_mulaibelajar.html', courses=courses, role=user_role)
                 except Exception as e:
                     flash(f"Error editing courses: {e}", "error")
                     return redirect(url_for('view_courses'))
@@ -251,17 +220,121 @@ class App_Kursus:
                 return redirect(url_for('login'))
 
         def get_komentar_for_matkul(nama_matkul):
-            # Kembalikan list komentar sesuai matkul, atau list kosong
             return []
 
         @self.app.route('/mulaibelajar')
         def mulaibelajar():
             nama_matkul = request.args.get('matkul')
-            matkul = matkul_dict.get(nama_matkul)
-            if not matkul:
-                flash("Mata kuliah tidak ditemukan.", "error")
+            if not nama_matkul:
+                flash("Nama mata kuliah tidak diberikan.", "error")
                 return redirect(url_for('index'))
-            return render_template('mulaibelajar.html', matkul=matkul)
+
+            cur = self.con.mysql.cursor()
+            try:
+                cur.execute("""
+                    SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
+                    FROM courses c
+                    LEFT JOIN users u ON c.instructor_id = u.id
+                    WHERE c.name = %s
+                """, (nama_matkul,))
+                matkul = cur.fetchone()
+
+                if not matkul:
+                    cur.execute("""
+                        INSERT INTO courses (name, description, visibility, materials, videos, instructor_id)
+                        VALUES (%s, %s, %s, %s, %s, NULL)
+                    """, (nama_matkul, 'Deskripsi belum tersedia', 'public', '[]', '[]'))
+                    self.con.mysql.commit()
+
+                    cur.execute("""
+                        SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
+                        FROM courses c
+                        LEFT JOIN users u ON c.instructor_id = u.id
+                        WHERE c.name = %s
+                    """, (nama_matkul,))
+                    matkul = cur.fetchone()
+
+                cur.execute("""
+                    SELECT u.fullname, cm.comment, cm.created_at
+                    FROM comments cm
+                    JOIN users u ON cm.user_id = u.id
+                    WHERE cm.course_id = %s
+                    ORDER BY cm.created_at DESC
+                """, (matkul[0],))
+                komentar_list = cur.fetchall()
+
+                id_matkul = matkul[0]
+
+                return render_template('mulaibelajar.html', matkul=matkul, komentar_list=komentar_list, id_matkul=id_matkul)
+            except Exception as e:
+                flash(f"Terjadi kesalahan: {e}", "error")
+                return redirect(url_for('index'))
+            finally:
+                cur.close()
+
+        @self.app.route('/edit_mulaibelajar/<int:course_id>', methods=['GET', 'POST'])
+        def edit_mulaibelajar(course_id):
+            if 'user_id' in session:
+                user_role = session.get('role')
+                user_id = session.get('user_id')
+
+                cur = self.con.mysql.cursor()
+                try:
+                    if request.method == 'POST':
+                        # Fetch current course data
+                        cur.execute("SELECT name, description, materials, videos FROM courses WHERE id = %s",
+                                    (course_id,))
+                        current_course = cur.fetchone()
+
+                        if not current_course:
+                            flash("Course not found!", "error")
+                            return redirect(url_for('view_courses'))
+
+                        # Get form data
+                        course_name = request.form['name'] or current_course[0]
+                        course_description = request.form['description'] or current_course[1]
+                        course_materials = request.form['materials'] or current_course[2]
+                        course_videos = request.form['videos'] or current_course[3]
+
+                        # Update based on user role
+                        if user_role == "instruktur":
+                            cur.execute(
+                                "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s AND instructor_id = %s",
+                                (course_name, course_description, course_materials, course_videos, course_id, user_id)
+                            )
+                        elif user_role == "admin":
+                            cur.execute(
+                                "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s",
+                                (course_name, course_description, course_materials, course_videos, course_id)
+                            )
+                        else:
+                            flash("Permission denied!", "error")
+                            return redirect(url_for('view_courses'))
+
+                        self.con.mysql.commit()
+                        flash("Course updated successfully!", "success")
+                        return redirect(url_for('view_courses'))
+                    else:
+                        if user_role in ["instruktur", "admin"]:
+                            cur.execute("SELECT * FROM courses WHERE id = %s", (course_id,))
+                            course = cur.fetchone()
+
+                            if not course:
+                                flash("Course not found!", "error")
+                                return redirect(url_for('view_courses'))
+
+                            return render_template('edit_mulaibelajar.html', course=course)
+                        else:
+                            flash("Permission denied!", "error")
+                            return redirect(url_for('view_courses'))
+                except Exception as e:
+                    flash(f"Error editing course: {e}", "error")
+                    return redirect(url_for('view_courses'))
+                finally:
+                    cur.close()
+            else:
+                flash("Please log in to edit courses.", "error")
+                return redirect(url_for('login'))
 
 
     def run(self):
