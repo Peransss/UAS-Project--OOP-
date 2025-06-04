@@ -23,7 +23,7 @@
   <div class="login-container">
     <h2>Masuk ke Inforku</h2>
     <div class="error-msg" id="loginError"></div>
-    <form id="loginForm" autocomplete="off" method="POST" action="{{ url_for('login') }}">
+    <form id="loginForm" autocomplete="off" method="POST" action="/login/process">
       <div class="form-group">
         <label for="loginUsername">Username</label>
         <input type="text" id="loginUsername" name="username" required>
