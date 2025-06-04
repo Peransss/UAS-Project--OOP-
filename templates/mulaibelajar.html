@@ -35,16 +35,16 @@
   </div>
   </nav>
   <div class="container">
-    <h1 id="mainTitle">Mulai Belajar: {{ matkul.nama if matkul else 'Belum dipilih' }}</h1>
+    <h1 id="mainTitle">Mulai Belajar: {{ matkul[1] if matkul else 'Belum dipilih' }}</h1>
     <div id="matkulBox" class="matkul-box">
-      <h2 id="matkulTitle">Mata Kuliah: {{ matkul.nama if matkul else 'Belum dipilih' }}</h2>
+      <h2 id="matkulTitle">Mata Kuliah: {{ matkul[1] if matkul else 'Belum dipilih' }}</h2>
       <div class="matkul-nav">
         <a href="#deskripsi">Deskripsi</a>
         <a href="#materi">Materi</a>
         <a href="#video">Video</a>
         <a href="{{ url_for('index') }}" style="margin-left:auto;">Ganti Matkul</a>
         {% if session['role'] in ['admin', 'instruktur'] %}
-          <a href="/edit_mulaibelajar/{{ id_matkul }}" class="edit-btn" style="margin-left:10px;">Edit</a>
+          <a href="/courses/edit/{{ id_matkul }}" class="edit-btn" style="margin-left:10px;">Edit</a>
         {% endif %}
       </div>
 
@@ -52,16 +52,16 @@
 
     <div id="deskripsi" class="section-box">
       <h2>Deskripsi Mata Kuliah</h2>
-      <p id="deskripsiContent">{{ matkul.deskripsi if matkul else 'Deskripsi mata kuliah akan tampil di sini.' }}</p>
+      <p id="deskripsiContent">{{ matkul[2] if matkul else 'Deskripsi mata kuliah akan tampil di sini.' }}</p>
     </div>
     <div id="materi" class="section-box">
       <h2>Materi Mata Kuliah</h2>
-      {% if matkul and matkul.materi %}
+      {% if matkul and matkul[4] %}
       {% else %}
       {% endif %}
         <p>Materi belum tersedia.</p>
         <ul class="materi-list">
-          {% for m in matkul.materi %}
+          {% for m in matkul[4] %}
             <li class="materi-item">
               <span class="icon">📄</span>
               <span class="materi-item-title">
@@ -79,12 +79,12 @@
     </div>
     <div id="video" class="section-box">
       <h2>Video Mata Kuliah</h2>
-      {% if matkul and matkul.video %}
+      {% if matkul and matkul.videos %}
       {% else %}
       {% endif %}
         <p>Video belum tersedia.</p>
         <ul class="video-list">
-          {% for v in matkul.video %}
+          {% for v in matkul.videos %}
             <li class="video-item">
               <span class="icon">🎬</span>
               <span class="video-item-title">

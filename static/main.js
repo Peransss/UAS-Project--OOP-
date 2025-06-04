@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ],
     2: [
       "Struktur Data",
-      "Aljabar Linier", 
+      "Aljabar Linier",
       "Pemrograman Berorientasi Objek",
       "Logika Matematika"
     ]
@@ -44,27 +44,11 @@ document.addEventListener("DOMContentLoaded", function() {
   const pilihanForm = document.getElementById("pilihanForm");
   if (pilihanForm) {
     pilihanForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const semester = document.getElementById("semester").value;
-      const matkul = document.getElementById("matkul").value;
-      const resultInfo = document.getElementById("resultInfo");
-      if (resultInfo) {
-        resultInfo.style.display = "block";
-        resultInfo.textContent = `Semester ${semester} - Mata Kuliah: ${matkul}`;
-      }
-    });
-  }
-
-  // Event: Tombol Mulai Belajar
-  const mulaiBtn = document.querySelector(".mulai-btn");
-  if (mulaiBtn) {
-    mulaiBtn.addEventListener("click", function() {
       const matkul = document.getElementById("matkul").value;
       if (!matkul) {
+        e.preventDefault();
         alert("Silakan pilih mata kuliah terlebih dahulu!");
-        return;
       }
-      window.location.href = "/mulaibelajar?matkul=" + encodeURIComponent(matkul);
     });
   }
 
