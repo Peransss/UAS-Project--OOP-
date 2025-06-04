@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ],
     2: [
       "Struktur Data",
-      "Aljabar Linier",
+      "Aljabar Linier", 
       "Pemrograman Berorientasi Objek",
       "Logika Matematika"
     ]
@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function() {
       const matkul = document.getElementById("matkul").value;
       if (matkul) {
         alert(`Mulai belajar: ${matkul}`);
-        // window.location.href = "belajar.html?matkul=" + encodeURIComponent(matkul); // jika ingin redirect
       } else {
         alert("Silakan pilih mata kuliah terlebih dahulu.");
       }
@@ -67,4 +66,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Inisialisasi awal
   updateMatkulOptions();
+
+  // Agar radio button "role" bisa di-uncheck jika diklik dua kali (khusus halaman login)
+  document.querySelectorAll('input[type=radio][name=role]').forEach(function(radio) {
+    radio.addEventListener('mousedown', function(e) {
+      if (this.checked) {
+        this.wasChecked = true;
+      } else {
+        this.wasChecked = false;
+      }
+    });
+    radio.addEventListener('click', function(e) {
+      if (this.wasChecked) {
+        this.checked = false;
+        this.wasChecked = false;
+        e.preventDefault();
+      }
+    });
+  });
 });

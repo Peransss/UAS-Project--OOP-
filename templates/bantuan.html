@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bantuan & CS Support - Inforku</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    .cs-container {
+      max-width: 420px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 28px;
+      text-align: center;
+    }
+    .cs-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #007bff 60%, #28a745 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px auto;
+      font-size: 38px;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .cs-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #222;
+    }
+    .cs-desc {
+      color: #555;
+      margin-bottom: 22px;
+      font-size: 1.05rem;
+    }
+    .cs-contact {
+      margin-bottom: 18px;
+      font-size: 1.1rem;
+    }
+    .cs-contact a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .cs-contact a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+    .cs-back {
+      display: inline-block;
+      margin-top: 18px;
+      color: #888;
+      font-size: 0.98rem;
+      text-decoration: none;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 6px 18px;
+      background: #f8f9fa;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cs-back:hover {
+      background: #e2e6ea;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+  <div class="cs-container">
+    <div class="cs-avatar">👩‍💻</div>
+    <div class="cs-title">Customer Support Inforku</div>
+    <div class="cs-desc">
+      Ada kendala, pertanyaan, atau butuh bantuan?<br>
+      Tim CS kami siap membantu Anda setiap hari!
+    </div>
+    <div class="cs-contact">
+      <strong>Email:</strong> <a href="mailto:support@inforku.com">support@inforku.com</a><br>
+      <strong>WhatsApp:</strong> <a href="https://wa.me/6281234567890" target="_blank">+62 812-3456-7890</a><br>
+      <strong>Live Chat:</strong> <a href="#">(Coming Soon)</a>
+    </div>
+    <a href="{{ url_for('main_page') }}" class="cs-back">← Kembali ke Beranda</a>
+  </div>
+</body>
+</html>

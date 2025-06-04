@@ -14,16 +14,16 @@
   <div class="nav-left">
     <div class="logo">Inforku</div>
     <div class="nav-links">
-      <a href="/">Home</a>
+      <a href="{{ url_for('index') }}">Home</a>
       <a href="#">Fitur</a>
       <a href="#">Testimoni</a>
-      <a href="#">Bantuan</a>
+      <a href="{{ url_for('bantuan') }}">Bantuan</a>
     </div>
   </div>
   <div class="nav-right">
     <div class="auth-buttons">
-      <button class="login-btn">Masuk</button>
-      <button class="login-btn">Daftar</button>
+      <a href="{{ url_for('login') }}" class="login-btn">Masuk</a>
+      <a href="{{ url_for('register') }}" class="login-btn">Daftar</a>
     </div>
   </div>    
   </nav>
@@ -106,19 +106,7 @@
       </div>
     </div>
   </section>
-  <script src="main.js"></script>
-  <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const btns = document.querySelectorAll('.navbar .login-btn');
-    if (btns.length >= 2) {
-      btns[0].addEventListener('click', function() {
-        window.location.href = "/login/";
-      });
-      btns[1].addEventListener('click', function() {
-        window.location.href = "/register/";
-      });
-    }
-  });
-</script>
+  <!-- Panggil JS dari static folder Flask -->
+  <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>

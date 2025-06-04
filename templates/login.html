@@ -23,14 +23,27 @@
   <div class="login-container">
     <h2>Masuk ke Inforku</h2>
     <div class="error-msg" id="loginError"></div>
-    <form id="loginForm" autocomplete="off">
+    <form id="loginForm" autocomplete="off" method="POST" action="/login/process">
       <div class="form-group">
         <label for="loginUsername">Username</label>
-        <input type="username" id="loginUsername" name="username" required>
+        <input type="text" id="loginUsername" name="username" required>
       </div>
       <div class="form-group">
         <label for="loginPassword">Kata Sandi</label>
         <input type="password" id="loginPassword" name="password" required>
+      </div>
+      <div class="form-group" style="margin-bottom: 16px;">
+        <div style="display: flex; gap: 16px;">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="radio" id="as_pengajar" name="role" value="pengajar" style="accent-color: #007bff; width: 18px; height: 18px;">
+            <span style="font-size: 15px;">Pengajar</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="radio" id="as_admin" name="role" value="admin" style="accent-color: #28a745; width: 18px; height: 18px;">
+            <span style="font-size: 15px;">Admin</span>
+          </label>
+        </div>
+        <small style="color: #888;">Biarkan kosong untuk login sebagai Mahasiswa</small>
       </div>
       <button type="submit" class="login-btn">Masuk</button>
     </form>
@@ -63,5 +76,24 @@
       }
     });
   </script> -->
+  <script>
+    // Membuat radio bisa di-uncheck jika diklik dua kali
+    document.querySelectorAll('input[type=radio][name=role]').forEach(function(radio) {
+      radio.addEventListener('mousedown', function(e) {
+        if (this.checked) {
+          this.wasChecked = true;
+        } else {
+          this.wasChecked = false;
+        }
+      });
+      radio.addEventListener('click', function(e) {
+        if (this.wasChecked) {
+          this.checked = false;
+          this.wasChecked = false;
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
