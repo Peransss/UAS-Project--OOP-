@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <title>Daftar - Inforku</title>
+  <style>
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <div class="logo">Inforku</div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="#">Fitur</a>
+        <a href="#">Testimoni</a>
+        <a href="#">Bantuan</a>
+      </div>
+    </div>
+  </nav>
+  <div class="register-container">
+    <h2>Daftar Akun Admin/Instruktur</h2>
+    <div class="error-msg" id="registerError"></div>
+    <form action="/register-admin-instruktur/process" id="registerForm" method="post" autocomplete="off">
+      <div class="form-group">
+        <label for="regName">Nama Lengkap</label>
+        <input type="text" id="regName" name="full_name" required>
+      </div>
+      <div class="form-group">
+        <label for="regUsername">Username</label>
+        <input type="text" id="regUsername" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="regPassword">Kata Sandi</label>
+        <input type="password" id="regPassword" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="regRole">Pilih Peran</label>
+        <select id="regRole" name="role" required>
+          <option value="" disabled selected>Pilih peran</option>
+          <option value="admin">Admin</option>
+          <option value="instruktur">Instruktur</option>
+        </select>
+      </div>
+      <button type="submit" class="register-btn">Daftar</button>
+    </form>
+    <a href="/login" class="login-link">Sudah punya akun? Masuk</a>
+  </div>
+</body>
+</html>

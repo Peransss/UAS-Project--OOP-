@@ -37,6 +37,10 @@ class App_Kursus:
         def register():
             return render_template('register.html')
 
+        @self.app.route('/reg-ai')
+        def reg_ai():
+            return render_template('register-admin-instruktur.html')
+
         @self.app.route('/login/process', methods=['POST'])
         def loginProcess():
             if request.method == 'POST':
@@ -82,6 +86,34 @@ class App_Kursus:
                 username = request.form['username']
                 password = request.form['password']
                 role = 'Mahasiswa'  # Hardcoded role for registration
+
+                cur = self.con.mysql.cursor()
+                try:
+                    # Insert user data into the database
+                    cur.execute(
+                        'INSERT INTO users (fullname, username, password, role) VALUES (%s, %s, md5(%s), %s)',
+                        (full_name, username, password, role)
+                    )
+                    self.con.mysql.commit()
+                    flash('Registration successful! You can now log in.', 'success')
+                except Exception as e:
+                    flash(f'Registration failed: {e}', 'error')
+                finally:
+                    cur.close()
+
+                return redirect(url_for('login'))
+
+        @self.app.route('/register-admin-instruktur/process', methods=['POST'])
+        def registerAdminInstrukturProcess():
+            if request.method == 'POST':
+                full_name = request.form['full_name']
+                username = request.form['username']
+                password = request.form['password']
+                role = request.form['role']  # Role selected from the form
+
+                if role not in ['admin', 'instruktur']:
+                    flash('Invalid role selected!', 'error')
+                    return redirect(url_for('reg_ai'))
 
                 cur = self.con.mysql.cursor()
                 try:
