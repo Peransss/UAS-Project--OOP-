@@ -226,7 +226,7 @@
       font-weight: 700;
       cursor: pointer;
       margin-top: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 5px;
       box-shadow: 0 2px 8px rgba(0,83,184,0.08);
       transition: background 0.2s, transform 0.2s;
     }
@@ -244,7 +244,7 @@
       font-weight: 700;
       cursor: pointer;
       transition: background 0.2s, color 0.2s, border 0.2s;
-      margin-top: 6px;
+      margin-top: 0px;
     }
     .hero-text .mulai-btn:hover {
       background: #0053b8;
