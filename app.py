@@ -1,5 +1,6 @@
 from flask import  Flask, flash, redirect, render_template, request, url_for, session
 from config import Config
+import user_role
 
 class App_Kursus:
     def __init__(self):
@@ -46,11 +47,10 @@ class App_Kursus:
             if request.method == 'POST':
                 username = request.form['username']
                 password = request.form['password']
-                role = request.form.get('role')  # Optional role input
+                role = request.form.get('role')
 
                 cur = self.con.mysql.cursor()
                 try:
-                    # Query to check user credentials
                     if role:
                         cur.execute(
                             "SELECT * FROM users WHERE username = %s AND password = md5(%s) AND role = %s",
@@ -107,7 +107,7 @@ class App_Kursus:
                 full_name = request.form['full_name']
                 username = request.form['username']
                 password = request.form['password']
-                role = request.form['role']  # Role selected from the form
+                role = request.form['role']
 
                 if role not in ['admin', 'instruktur']:
                     flash('Invalid role selected!', 'error')
@@ -115,7 +115,6 @@ class App_Kursus:
 
                 cur = self.con.mysql.cursor()
                 try:
-                    # Insert user data into the database
                     cur.execute(
                         'INSERT INTO users (fullname, username, password, role) VALUES (%s, %s, md5(%s), %s)',
                         (full_name, username, password, role)
@@ -131,9 +130,96 @@ class App_Kursus:
 
         @self.app.route('/logout')
         def logout():
-            session.clear()  # Clear all session data
+            session.clear()
             flash('You have been logged out.', 'info')
             return redirect(url_for('login'))
+
+        # Python
+        @self.app.route('/courses/view')
+        def view_courses():
+            if 'user_id' in session:
+                user_role = session.get('role')
+                user_id = session.get('user_id')
+
+                cur = self.con.mysql.cursor()
+                try:
+                    # Fetch courses based on user role
+                    if user_role == "mahasiswa":
+                        cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
+                    elif user_role == "instruktur":
+                        cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
+                    elif user_role == "admin":
+                        cur.execute("SELECT * FROM courses")
+                    else:
+                        flash("Invalid role detected!", "error")
+                        return redirect(url_for('login'))
+
+                    courses = cur.fetchall()
+                    return render_template('courses.html', courses=courses, role=user_role)
+                except Exception as e:
+                    flash(f"Error fetching courses: {e}", "error")
+                    return redirect(url_for('index'))
+                finally:
+                    cur.close()
+            else:
+                flash("Please log in to view courses.", "error")
+                return redirect(url_for('login'))
+
+        @self.app.route('/courses/edit', methods=['GET', 'POST'])
+        def edit_courses():
+            if 'user_id' in session:
+                user_role = session.get('role')
+                user_id = session.get('user_id')
+
+                cur = self.con.mysql.cursor()
+                try:
+                    if request.method == 'POST':
+                        course_id = request.form['course_id']
+                        course_name = request.form['course_name']
+                        course_description = request.form['course_description']
+
+                        if user_role == "mahasiswa":
+                            flash("Permission denied! Mahasiswa cannot edit courses.", "error")
+                            return redirect(url_for('view_courses'))
+                        elif user_role == "instruktur":
+                            cur.execute(
+                                "UPDATE courses SET name = %s, description = %s WHERE id = %s AND instructor_id = %s",
+                                (course_name, course_description, course_id, user_id)
+                            )
+                        elif user_role == "admin":
+                            cur.execute(
+                                "UPDATE courses SET name = %s, description = %s WHERE id = %s",
+                                (course_name, course_description, course_id)
+                            )
+                        else:
+                            flash("Invalid role detected!", "error")
+                            return redirect(url_for('login'))
+
+                        self.con.mysql.commit()
+                        flash("Course updated successfully!", "success")
+                        return redirect(url_for('view_courses'))
+                    else:
+                        if user_role == "mahasiswa":
+                            flash("Permission denied! Mahasiswa cannot edit courses.", "error")
+                            return redirect(url_for('view_courses'))
+                        elif user_role == "instruktur":
+                            cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
+                        elif user_role == "admin":
+                            cur.execute("SELECT * FROM courses")
+                        else:
+                            flash("Invalid role detected!", "error")
+                            return redirect(url_for('login'))
+
+                        courses = cur.fetchall()
+                        return render_template('edit_courses.html', courses=courses, role=user_role)
+                except Exception as e:
+                    flash(f"Error editing courses: {e}", "error")
+                    return redirect(url_for('view_courses'))
+                finally:
+                    cur.close()
+            else:
+                flash("Please log in to edit courses.", "error")
+                return redirect(url_for('login'))
 
 
     def run(self):
