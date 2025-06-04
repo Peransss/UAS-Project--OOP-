@@ -384,3 +384,74 @@
         gap: 10px;
       }
     }
+
+/*  logo profil  */
+.profile-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-icon {
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.profile-icon:hover {
+  background-color: #357ABD;
+}
+
+/* Initially hide the details */
+.profile-details {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  min-width: 180px;
+  padding: 12px 16px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+  text-align: center;
+  user-select: none;
+  transform: translateY(10px);
+}
+
+/* Show details on profile-container hover */
+.profile-container:hover .profile-details {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.profile-details p {
+  margin: 6px 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.logout-btn {
+  padding: 8px 16px;
+  margin-left: 12px; /* spacing between icon and logout */
+  background: #E94E77;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+  user-select: none;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.logout-btn:hover {
+  background: #D43D64;
+}
+

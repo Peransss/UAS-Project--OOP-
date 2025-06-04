@@ -66,12 +66,11 @@ class App_Kursus:
                     cur.close()
 
                     if user:
-                        # Store user info in session
-                        session['user_id'] = user[0]  # Assuming `id` is the first column
-                        session['username'] = user[2]  # Assuming `username` is the third column
-                        session['role'] = user[4]  # Assuming `role` is the fifth column
+                        session['user_id'] = user[0]
+                        session['username'] = user[2]
+                        session['role'] = user[4]
                         flash('Login successful!', 'success')
-                        return redirect(url_for('index'))  # Correct endpoint name
+                        return redirect(url_for('index'))
                     else:
                         flash('Invalid credentials or role!', 'error')
                         return redirect(url_for('login'))
@@ -85,11 +84,10 @@ class App_Kursus:
                 full_name = request.form['full_name']
                 username = request.form['username']
                 password = request.form['password']
-                role = 'Mahasiswa'  # Hardcoded role for registration
+                role = 'Mahasiswa'
 
                 cur = self.con.mysql.cursor()
                 try:
-                    # Insert user data into the database
                     cur.execute(
                         'INSERT INTO users (fullname, username, password, role) VALUES (%s, %s, md5(%s), %s)',
                         (full_name, username, password, role)
@@ -130,6 +128,13 @@ class App_Kursus:
                     cur.close()
 
                 return redirect(url_for('login'))
+
+        @self.app.route('/logout')
+        def logout():
+            session.clear()  # Clear all session data
+            flash('You have been logged out.', 'info')
+            return redirect(url_for('login'))
+
 
     def run(self):
         self.app.run(debug=True)
