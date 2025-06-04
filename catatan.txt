@@ -1,0 +1,4 @@
+- Permission untuk:
+a) Mahasiswa tidak bisa edit dan menambahkan file kursus
+b) instruktur hanya bisa edit dan menambahkan file kursus yang dia pegang
+c) admin bisa edit dan menambahkan file kursus apapun
