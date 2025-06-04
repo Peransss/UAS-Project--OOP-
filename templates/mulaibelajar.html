@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Mulai Belajar</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <style>
+    body {
+      margin: 0;
+      padding: 18px;
+      background: linear-gradient(120deg, #e3f0ff 0%, #f4f7fb 100%);
+      min-height: 100vh;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .container {
+      max-width: 1100px;
+      min-height: 96vh;
+      margin: 0 auto;
+      padding: 32px 24px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+      box-sizing: border-box;
+    }
+    #mainTitle {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #2a3b6d;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .matkul-box {
+      margin: 28px auto 24px auto;
+      padding: 22px 18px;
+      background: #f8faff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      text-align: left;
+      border-left: 5px solid #007bff;
+      max-width: 700px;
+    }
+    #matkulTitle {
+      color: #007bff;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .matkul-nav {
+      display: flex;
+      justify-content: flex-start;
+      gap: 16px;
+      margin-bottom: 8px;
+      margin-top: 10px;
+    }
+    .matkul-nav a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 7px 18px;
+      border-radius: 7px;
+      background: #eaf3ff;
+      border: 1px solid #d0e5ff;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 6px rgba(0,123,255,0.04);
+    }
+    .matkul-nav a:hover, .matkul-nav a:focus {
+      background: #007bff;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,123,255,0.10);
+    }
+    .matkul-nav a:last-child {
+      margin-left: auto;
+      background: #ffefef;
+      color: #d32f2f;
+      border: 1px solid #ffd6d6;
+      font-weight: 600;
+    }
+    .section-box {
+      margin: 32px 0;
+      padding: 26px 22px;
+      background: #f4f7fb;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      text-align: left;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .section-box h2 {
+      margin-top: 0;
+      color: #007bff;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    /* Materi & Video List */
+    .materi-list, .video-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .materi-item, .video-item {
+      flex: 1 1 260px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,123,255,0.05);
+      border: 1.5px solid #e3eafc;
+      transition: box-shadow 0.2s, border 0.2s;
+      padding: 16px 18px;
+      margin-bottom: 0;
+      cursor: pointer;
+      position: relative;
+      min-width: 220px;
+    }
+    .materi-item:hover, .video-item:hover {
+      border: 1.5px solid #007bff;
+      box-shadow: 0 4px 16px rgba(0,123,255,0.10);
+      background: #f0f7ff;
+    }
+    .materi-item .icon, .video-item .icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    .materi-item-title, .video-item-title {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #2a3b6d;
+      display: inline;
+    }
+    /* Detail Popups */
+    #materiDetail, #videoDetail {
+      display: none;
+      margin-top: 18px;
+      background: #fffbe7;
+      padding: 22px 18px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(255,193,7,0.08);
+      position: relative;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      z-index: 10;
+    }
+    #videoDetail {
+      background: #e7f7ff;
+      box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+    }
+    #materiJudul, #videoJudul {
+      color: #007bff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    #materiIsi {
+      color: #333;
+      margin-bottom: 12px;
+    }
+    #materiPdf, #videoDownload {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 7px 20px;
+      background: #007bff;
+      color: #fff;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    #materiPdf:hover, #videoDownload:hover {
+      background: #0056b3;
+    }
+    .close-btn {
+      margin-left: 18px;
+      background: #f8d7da;
+      color: #d32f2f;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .close-btn:hover {
+      background: #f5bcbc;
+    }
+    /* Komentar */
+    #komentar {
+      background: #f8faff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #komentar textarea {
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+    #komentar button[type="submit"] {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 8px 24px;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    #komentar button[type="submit"]:hover {
+      background: #0056b3;
+    }
+    #komentar ul {
+      margin-top: 10px;
+    }
+    #komentar li {
+      background: #f4f7fb;
+      border-radius: 7px;
+      padding: 8px 14px;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 1rem;
+    }
+    @media (max-width: 800px) {
+      .container, .section-box, #komentar { padding: 10px 4vw; }
+      .materi-list, .video-list { flex-direction: column; gap: 10px; }
+      .materi-item, .video-item { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="mainTitle">Mulai Belajar: {{ matkul.nama if matkul else 'Belum dipilih' }}</h1>
+    <div id="matkulBox" class="matkul-box">
+      <h2 id="matkulTitle">Mata Kuliah: {{ matkul.nama if matkul else 'Belum dipilih' }}</h2>
+      <div class="matkul-nav">
+        <a href="#deskripsi">Deskripsi</a>
+        <a href="#materi">Materi</a>
+        <a href="#video">Video</a>
+        <a href="{{ url_for('index') }}" style="margin-left:auto;">Ganti Matkul</a>
+      </div>
+    </div>
+    <div id="deskripsi" class="section-box">
+      <h2>Deskripsi Mata Kuliah</h2>
+      <p id="deskripsiContent">{{ matkul.deskripsi if matkul else 'Deskripsi mata kuliah akan tampil di sini.' }}</p>
+    </div>
+    <div id="materi" class="section-box">
+      <h2>Materi Mata Kuliah</h2>
+      {% if matkul and matkul.materi %}
+        <ul class="materi-list">
+          {% for m in matkul.materi %}
+            <li class="materi-item">
+              <span class="icon">📄</span>
+              <span class="materi-item-title">
+                <a href="#" class="materi-link" data-idx="{{ loop.index0 }}" style="color:inherit;text-decoration:none;">{{ m.judul }}</a>
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+        <div id="materiDetail">
+          <h3 id="materiJudul"></h3>
+          <p id="materiIsi"></p>
+          <a id="materiPdf" href="#" target="_blank">Download PDF</a>
+          <button class="close-btn" onclick="document.getElementById('materiDetail').style.display='none'">Tutup</button>
+        </div>
+      {% else %}
+        <p>Materi belum tersedia.</p>
+      {% endif %}
+    </div>
+    <div id="video" class="section-box">
+      <h2>Video Mata Kuliah</h2>
+      {% if matkul and matkul.video %}
+        <ul class="video-list">
+          {% for v in matkul.video %}
+            <li class="video-item">
+              <span class="icon">🎬</span>
+              <span class="video-item-title">
+                <a href="#" class="video-link" data-idx="{{ loop.index0 }}" style="color:inherit;text-decoration:none;">{{ v.judul }}</a>
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+        <div id="videoDetail">
+          <h3 id="videoJudul"></h3>
+          <div id="videoFrame"></div>
+          <a id="videoDownload" href="#" target="_blank">Download Video</a>
+          <button class="close-btn" onclick="document.getElementById('videoDetail').style.display='none'">Tutup</button>
+        </div>
+      {% else %}
+        <p>Video belum tersedia.</p>
+      {% endif %}
+    </div>
+    <!-- Kolom Komentar -->
+    <div id="komentar" class="section-box" style="margin-top:40px;">
+      <h2>Berikan Review atau Komentar</h2>
+      <form method="POST" action="">
+        <textarea name="isi_komentar" rows="4" style="width:100%;border-radius:8px;border:1px solid #ccc;padding:10px;" placeholder="Tulis komentar atau review Anda di sini..." required></textarea>
+        <br>
+        <button type="submit">Kirim</button>
+      </form>
+      <div style="margin-top:24px;">
+        <h3 style="font-size:1.1rem;">Komentar Pengguna:</h3>
+        {% if komentar_list %}
+          <ul>
+            {% for k in komentar_list %}
+              <li>{{ k }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p style="color:#888;">Belum ada komentar.</p>
+        {% endif %}
+      </div>
+    </div>
+    <a href="{{ url_for('index') }}" style="display:inline-block;margin-top:24px;color:#007bff;text-decoration:none;">← Kembali ke Beranda</a>
+  </div>
+  <script>
+    // Materi
+    {% if matkul and matkul.materi %}
+    const materiData = {{ matkul.materi|tojson }};
+    document.querySelectorAll('.materi-link').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const idx = this.getAttribute('data-idx');
+        document.getElementById('materiJudul').textContent = materiData[idx].judul;
+        document.getElementById('materiIsi').textContent = materiData[idx].isi;
+        document.getElementById('materiPdf').href = materiData[idx].pdf_url;
+        document.getElementById('materiDetail').style.display = 'block';
+        document.getElementById('materiDetail').scrollIntoView({behavior: "smooth"});
+      });
+    });
+    {% endif %}
+
+    // Video
+    {% if matkul and matkul.video %}
+    const videoData = {{ matkul.video|tojson }};
+    document.querySelectorAll('.video-link').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const idx = this.getAttribute('data-idx');
+        document.getElementById('videoJudul').textContent = videoData[idx].judul;
+        document.getElementById('videoFrame').innerHTML = '<iframe width="100%" height="315" src="' + videoData[idx].video_url + '" frameborder="0" allowfullscreen></iframe>';
+        document.getElementById('videoDownload').href = videoData[idx].download_url;
+        document.getElementById('videoDetail').style.display = 'block';
+        document.getElementById('videoDetail').scrollIntoView({behavior: "smooth"});
+      });
+    });
+    {% endif %}
+  </script>
+</body>
+</html>

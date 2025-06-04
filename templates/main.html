@@ -43,7 +43,7 @@
   <div class="hero-text">
     <h1>Informatika Jadi Lebih Mematikan</h1>
     <p>Dapatkan akses ke ribuan video pembelajaran, latihan soal, dan mentor terbaik hanya di Inforku.</p>
-    <form id="pilihanForm" style="margin-bottom: 20px;">
+    <form id="pilihanForm" method="get" action="/mulaibelajar">
       <div class="custom-form-group">
         <label for="semester">Semester</label>
         <select id="semester" name="semester">
@@ -57,9 +57,8 @@
           <!-- Akan diisi oleh JS -->
         </select>
       </div>
-      <button type="submit">Pilih</button>
+      <button type="submit" class="mulai-btn">Mulai Belajar</button>
     </form>
-    <button class="mulai-btn">Mulai Belajar</button>
     <div class="result-info" id="resultInfo"></div>
   </div>
 
@@ -119,5 +118,16 @@
   </section>
   <!-- Panggil JS dari static folder Flask -->
   <script src="{{ url_for('static', filename='main.js') }}"></script>
+  <script>
+  document.querySelector('.mulai-btn').addEventListener('click', function() {
+    const matkul = document.getElementById('matkul').value;
+    if (!matkul) {
+      alert('Silakan pilih mata kuliah terlebih dahulu!');
+      return;
+    }
+    // Redirect ke route mulaibelajar dengan query string matkul
+    window.location.href = "/mulaibelajar?matkul=" + encodeURIComponent(matkul);
+  });
+  </script>
 </body>
 </html>

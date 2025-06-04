@@ -1,6 +1,35 @@
 from flask import  Flask, flash, redirect, render_template, request, url_for, session
 from config import Config
-import user_role
+
+class MataKuliah:
+    def __init__(self, nama, deskripsi, materi, video_url):
+        self.nama = nama
+        self.deskripsi = deskripsi
+        self.materi = materi  # list of string
+        self.video_url = video_url
+
+# Data matkul
+matkul_dict = {
+    "Struktur Data": MataKuliah(
+        "Struktur Data",
+        "Struktur Data membahas cara menyimpan, mengelola, dan memproses data secara efisien.",
+        ["Array & Linked List", "Stack & Queue", "Tree & Graph"],
+        "https://www.youtube.com/embed/1OEu9C51K2A"
+    ),
+    "Aljabar Linier": MataKuliah(
+        "Aljabar Linier",
+        "Aljabar Linier mempelajari vektor, matriks, dan transformasi linier.",
+        ["Vektor & Matriks", "SPL", "Transformasi Linier"],
+        "https://www.youtube.com/embed/2OEu9C51K2B"
+    ),
+    "Pemrograman Dasar": MataKuliah(
+        "Pemrograman Dasar",
+        "Pemrograman Dasar mengenalkan konsep dasar pemrograman komputer.",
+        ["Variabel & Tipe Data", "Percabangan & Perulangan", "Fungsi"],
+        "https://www.youtube.com/embed/3OEu9C51K2C"
+    ),
+    # Tambahkan matkul lain sesuai kebutuhan
+}
 
 class App_Kursus:
     def __init__(self):
@@ -220,6 +249,19 @@ class App_Kursus:
             else:
                 flash("Please log in to edit courses.", "error")
                 return redirect(url_for('login'))
+
+        def get_komentar_for_matkul(nama_matkul):
+            # Kembalikan list komentar sesuai matkul, atau list kosong
+            return []
+
+        @self.app.route('/mulaibelajar')
+        def mulaibelajar():
+            nama_matkul = request.args.get('matkul')
+            matkul = matkul_dict.get(nama_matkul)
+            if not matkul:
+                flash("Mata kuliah tidak ditemukan.", "error")
+                return redirect(url_for('index'))
+            return render_template('mulaibelajar.html', matkul=matkul)
 
 
     def run(self):

@@ -15,19 +15,23 @@ document.addEventListener("DOMContentLoaded", function() {
     ]
   };
 
+  // Contoh data, sesuaikan dengan backend
+  const matkulBySemester = {
+    1: ["Pemrograman Dasar", "Statistik dan Probabilitas", "Matematika Diskrit", "Pengantar Teknologi Informasi"],
+    2: ["Struktur Data", "Aljabar Linier", "Pemrograman Berorientasi Objek", "Logika Matematika"]
+  };
+
   // Fungsi untuk mengisi pilihan mata kuliah sesuai semester
   function updateMatkulOptions() {
     const semester = document.getElementById("semester").value;
     const matkulSelect = document.getElementById("matkul");
     matkulSelect.innerHTML = "";
-    if (matkulData[semester]) {
-      matkulData[semester].forEach(matkul => {
-        const option = document.createElement("option");
-        option.value = matkul;
-        option.textContent = matkul;
-        matkulSelect.appendChild(option);
-      });
-    }
+    matkulBySemester[semester].forEach(function(matkul) {
+      const opt = document.createElement("option");
+      opt.value = matkul;
+      opt.textContent = matkul;
+      matkulSelect.appendChild(opt);
+    });
   }
 
   // Event: Ganti semester
@@ -56,11 +60,11 @@ document.addEventListener("DOMContentLoaded", function() {
   if (mulaiBtn) {
     mulaiBtn.addEventListener("click", function() {
       const matkul = document.getElementById("matkul").value;
-      if (matkul) {
-        alert(`Mulai belajar: ${matkul}`);
-      } else {
-        alert("Silakan pilih mata kuliah terlebih dahulu.");
+      if (!matkul) {
+        alert("Silakan pilih mata kuliah terlebih dahulu!");
+        return;
       }
+      window.location.href = "/mulaibelajar?matkul=" + encodeURIComponent(matkul);
     });
   }
 
