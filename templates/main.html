@@ -9,6 +9,7 @@
   </style>
 </head>
 <body>
+
   <!-- Navbar -->
   <nav class="navbar">
   <div class="nav-left">
@@ -39,6 +40,16 @@
   </div>
   </nav>
 
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
   <!-- Hero Section -->
   <div class="hero-text">
     <h1>Informatika Jadi Lebih Mematikan</h1>

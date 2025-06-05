@@ -152,6 +152,15 @@ class App_Kursus:
                 cur = self.con.mysql.cursor()
                 try:
                     if matkul:
+                        # Check if the user has purchased the course
+                        cur.execute("""
+                            SELECT * FROM purchases WHERE user_id = %s AND course_id = (
+                                SELECT id FROM courses WHERE name = %s
+                            )
+                        """, (user_id, matkul))
+                        purchase = cur.fetchone()
+
+                        # Fetch course data
                         cur.execute("""
                             SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
                             FROM courses c
@@ -160,21 +169,7 @@ class App_Kursus:
                         """, (matkul,))
                         matkul_data = cur.fetchone()
 
-                        if not matkul_data:
-                            cur.execute("""
-                                INSERT INTO courses (name, description, visibility, materials, videos, instructor_id)
-                                VALUES (%s, %s, %s, %s, %s, NULL)
-                            """, (matkul, 'Deskripsi belum tersedia', 'public', '[]', '[]'))
-                            self.con.mysql.commit()
-
-                            cur.execute("""
-                                SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
-                                FROM courses c
-                                LEFT JOIN users u ON c.instructor_id = u.id
-                                WHERE c.name = %s
-                            """, (matkul,))
-                            matkul_data = cur.fetchone()
-
+                        # Fetch comments
                         cur.execute("""
                             SELECT u.fullname, cm.comment, cm.created_at
                             FROM comments cm
@@ -184,10 +179,17 @@ class App_Kursus:
                         """, (matkul_data[0],))
                         komentar_list = cur.fetchall()
 
-
-                        return render_template('mulaibelajar.html', matkul=matkul_data, komentar_list=komentar_list,
-                                               id_matkul=matkul_data[0], nama_ins=matkul_data[5])
+                        # Render the page with locked content if not purchased
+                        return render_template(
+                            'mulaibelajar.html',
+                            matkul=matkul_data,
+                            komentar_list=komentar_list,
+                            id_matkul=matkul_data[0],
+                            nama_ins=matkul_data[5],
+                            is_locked=not purchase  # Pass locked status to the template
+                        )
                     else:
+                        # Display list of courses
                         if user_role == "Mahasiswa":
                             cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
                         elif user_role == "Instruktur":
@@ -308,6 +310,35 @@ class App_Kursus:
                     cur.close()
             else:
                 flash("Please log in to view courses.", "error")
+                return redirect(url_for('login'))
+
+        @self.app.route('/courses/buy/<int:course_id>', methods=['POST'])
+        def buy_course(course_id):
+            if 'user_id' in session:
+                user_id = session.get('user_id')
+
+                cur = self.con.mysql.cursor()
+                try:
+                    # Periksa apakah course sudah dibeli
+                    cur.execute("SELECT * FROM purchases WHERE user_id = %s AND course_id = %s", (user_id, course_id))
+                    purchase = cur.fetchone()
+
+                    if purchase:
+                        flash("Anda sudah membeli course ini!", "info")
+                        return redirect(url_for('view_courses'))
+
+                    # Tambahkan pembelian
+                    cur.execute("INSERT INTO purchases (user_id, course_id) VALUES (%s, %s)", (user_id, course_id))
+                    self.con.mysql.commit()
+                    flash("Pembelian berhasil!", "success")
+                    return redirect(url_for('view_courses'))
+                except Exception as e:
+                    flash(f"Error: {e}", "error")
+                    return redirect(url_for('view_courses'))
+                finally:
+                    cur.close()
+            else:
+                flash("Please log in to buy courses.", "error")
                 return redirect(url_for('login'))
 
     def run(self):

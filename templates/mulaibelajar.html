@@ -44,6 +44,14 @@
         <a href="#materi">Materi</a>
         <a href="#video">Video</a>
         <a href="{{ url_for('index') }}" style="margin-left:auto;">Ganti Matkul</a>
+              {% if session['role'] == 'Mahasiswa' %}
+{% if session['role'] == 'Mahasiswa' and is_locked %}
+<div class="locked-logo"></div>
+<form method="POST" action="{{ url_for('buy_course', course_id=matkul[0]) }}">
+  <button type="submit">Beli Course</button>
+</form>
+{% endif %}
+        {% endif %}
         {% if session['role'] in ['Admin', 'Instruktur'] %}
           <a href="/courses/edit/{{ id_matkul }}" class="edit-btn" style="margin-left:10px;">Edit</a>
         {% endif %}
@@ -51,49 +59,48 @@
 
     </div>
 
-    <div id="deskripsi" class="section-box">
-      <h2>Deskripsi Mata Kuliah</h2>
-      <p id="deskripsiContent">{{ matkul[2] if matkul else 'Deskripsi mata kuliah akan tampil di sini.' }}</p>
-    </div>
-    <div id="materi" class="section-box">
-      <h2>Materi Mata Kuliah</h2>
-      {% if matkul and matkul[4] %}
-      {% else %}
-      {% endif %}
-        <p>Materi belum tersedia.</p>
-        <ul class="materi-list">
-          {% for m in matkul[4] %}
-            <li class="materi-item">
-              <span class="icon">📄</span>
-              <span class="materi-item-title">
-                <a href="#" class="materi-link" data-idx="{{ loop.index0 }}" style="color:inherit;text-decoration:none;">{{ m.judul }}</a>
-              </span>
-            </li>
-          {% endfor %}
-        </ul>
-        <div id="materiDetail">
-          <h3 id="materiJudul"></h3>
-          <p id="materiIsi"></p>
-          <a id="materiPdf" href="#" target="_blank">Download PDF</a>
-          <button class="close-btn" onclick="document.getElementById('materiDetail').style.display='none'">Tutup</button>
-        </div>
-    </div>
-    <div id="video" class="section-box">
-      <h2>Video Mata Kuliah</h2>
-      {% if matkul and matkul.videos %}
-      {% else %}
-      {% endif %}
-        <p>Video belum tersedia.</p>
-        <ul class="video-list">
-          {% for v in matkul.videos %}
-            <li class="video-item">
-              <span class="icon">🎬</span>
-              <span class="video-item-title">
-                <a href="#" class="video-link" data-idx="{{ loop.index0 }}" style="color:inherit;text-decoration:none;">{{ v.judul }}</a>
-              </span>
-            </li>
-          {% endfor %}
-        </ul>
+<div id="deskripsi" class="section-box">
+  <h2>Deskripsi Mata Kuliah</h2>
+  {% if is_locked %}
+    <p>Konten terkunci. Silakan beli course untuk mengakses deskripsi.</p>
+  {% else %}
+    <p id="deskripsiContent">{{ matkul[2] if matkul else 'Deskripsi mata kuliah akan tampil di sini.' }}</p>
+  {% endif %}
+</div>
+<div id="materi" class="section-box">
+  <h2>Materi Mata Kuliah</h2>
+  {% if is_locked %}
+    <p>Konten terkunci. Silakan beli course untuk mengakses materi.</p>
+  {% else %}
+    <ul class="materi-list">
+      {% for m in matkul[4] %}
+        <li class="materi-item">
+          <span class="icon">📄</span>
+          <span class="materi-item-title">
+            <a href="#" class="materi-link" data-idx="{{ loop.index0 }}" style="color:inherit;text-decoration:none;">{{ m.judul }}</a>
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+<div id="video" class="section-box">
+  <h2>Video Mata Kuliah</h2>
+  {% if is_locked %}
+    <p>Konten terkunci. Silakan beli course untuk mengakses video.</p>
+  {% else %}
+    <ul class="video-list">
+      {% for v in matkul.videos %}
+        <li class="video-item">
+          <span class="icon">🎬</span>
+          <span class="video-item-title">
+            <a href="#" class="video-link" data-idx="{{ loop.index0 }}" style="color:inherit;text-decoration:none;">{{ v.judul }}</a>
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
         <div id="videoDetail">
           <h3 id="videoJudul"></h3>
           <div id="videoFrame"></div>

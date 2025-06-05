@@ -732,3 +732,81 @@
     min-width: 0;
   }
 }
+    /* Flashed messages container */
+.flashes {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+/* General styles for flash messages */
+.flashes li {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Success message */
+.flashes li.success {
+  background-color: #4caf50; /* Green */
+  border: 1px solid #388e3c;
+}
+
+/* Error message */
+.flashes li.error {
+  background-color: #f44336; /* Red */
+  border: 1px solid #d32f2f;
+}
+
+/* Info message */
+.flashes li.info {
+  background-color: #2196f3; /* Blue */
+  border: 1px solid #1976d2;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+/* Styling for the "Beli Course" button */
+form button[type="submit"] {
+  background: #28a745; /* Primary green color */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for the button */
+  font-weight: 600; /* Bold text */
+  font-size: 1rem; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
+}
+
+form button[type="submit"]:hover {
+  background: #218838; /* Darker green on hover */
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3); /* Add shadow effect */
+}
+
+/* CSS for the locked logo */
+.locked-logo {
+  width: 50px;
+  height: 50px;
+  background-image: url('../static/images/locked-icon.png'); /* Path to the locked icon */
+  background-size: cover;
+  background-position: center;
+  margin: 0 auto 10px; /* Center the logo and add spacing below */
+}
