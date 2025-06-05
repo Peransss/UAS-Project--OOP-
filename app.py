@@ -320,7 +320,6 @@ class App_Kursus:
 
                 cur = self.con.mysql.cursor()
                 try:
-                    # Periksa apakah course sudah dibeli
                     cur.execute("SELECT * FROM purchases WHERE user_id = %s AND course_id = %s", (user_id, course_id))
                     purchase = cur.fetchone()
 
@@ -328,7 +327,6 @@ class App_Kursus:
                         flash("Anda sudah membeli course ini!", "info")
                         return redirect(url_for('view_courses'))
 
-                    # Tambahkan pembelian
                     cur.execute("INSERT INTO purchases (user_id, course_id) VALUES (%s, %s)", (user_id, course_id))
                     self.con.mysql.commit()
                     flash("Pembelian berhasil!", "success")
@@ -351,7 +349,6 @@ class App_Kursus:
             user_id = session['user_id']
             cur = self.con.mysql.cursor()
             try:
-                # Fetch transactions for the logged-in user
                 cur.execute('''
                     SELECT u.fullname AS user_name, c.name AS course_name, p.purchase_date
                     FROM purchases p
@@ -366,23 +363,18 @@ class App_Kursus:
             finally:
                 cur.close()
 
-            # Render template HTML for the report
             rendered = render_template('transaction.html', data=data)
 
-            # Set the path to the wkhtmltopdf executable
             config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
 
-            # Define options for wkhtmltopdf
             options = {
                 'enable-local-file-access': True,
                 'disable-smart-shrinking': True,
                 'quiet': ''
             }
 
-            # Generate the PDF using the configuration and options
             pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 
-            # Send the PDF file as a response
             response = self.app.response_class(pdf, content_type='application/pdf')
             response.headers['Content-Disposition'] = f'inline; filename={session.get("fullname")}-transaction.pdf'
             return response

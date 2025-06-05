@@ -736,8 +736,13 @@
 .flashes {
   list-style: none;
   padding: 0;
-  margin: 20px auto;
-  max-width: 600px;
+  margin: 0;
+  position: fixed;
+  top: 13%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 300px;
+  z-index: 1000; /* Ensure it stays above other elements */
 }
 
 /* General styles for flash messages */
