@@ -344,15 +344,21 @@ class App_Kursus:
 
         @self.app.route('/transaction')
         def transaction():
+            if 'user_id' not in session:
+                flash("Please log in to view transactions.", "error")
+                return redirect(url_for('login'))
+
+            user_id = session['user_id']
             cur = self.con.mysql.cursor()
             try:
-                # Fetch data from purchases table with joins for user and course details
+                # Fetch transactions for the logged-in user
                 cur.execute('''
                     SELECT u.fullname AS user_name, c.name AS course_name, p.purchase_date
                     FROM purchases p
                     JOIN users u ON p.user_id = u.id
                     JOIN courses c ON p.course_id = c.id
-                ''')
+                    WHERE p.user_id = %s
+                ''', (user_id,))
                 data = cur.fetchall()
             except Exception as e:
                 flash(f"Error fetching transaction data: {e}", "error")
