@@ -153,14 +153,6 @@ class App_Kursus:
                 cur = self.con.mysql.cursor()
                 try:
                     if matkul:
-                        # Check if the user has purchased the course
-                        cur.execute("""
-                            SELECT * FROM purchases WHERE user_id = %s AND course_id = (
-                                SELECT id FROM courses WHERE name = %s
-                            )
-                        """, (user_id, matkul))
-                        purchase = cur.fetchone()
-
                         # Fetch course data
                         cur.execute("""
                             SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
@@ -180,14 +172,25 @@ class App_Kursus:
                         """, (matkul_data[0],))
                         komentar_list = cur.fetchall()
 
-                        # Render the page with locked content if not purchased
+                        # Check if the user has purchased the course
+                        is_locked = True
+                        if user_role in ['Instruktur', 'Admin']:
+                            is_locked = False  # Instructors and Admins can view all content
+                        else:
+                            cur.execute("""
+                                SELECT * FROM purchases WHERE user_id = %s AND course_id = %s
+                            """, (user_id, matkul_data[0]))
+                            purchase = cur.fetchone()
+                            is_locked = not purchase
+
+                        # Render the page
                         return render_template(
                             'mulaibelajar.html',
                             matkul=matkul_data,
                             komentar_list=komentar_list,
                             id_matkul=matkul_data[0],
                             nama_ins=matkul_data[5],
-                            is_locked=not purchase  # Pass locked status to the template
+                            is_locked=is_locked
                         )
                     else:
                         # Display list of courses
