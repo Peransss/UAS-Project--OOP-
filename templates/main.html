@@ -22,21 +22,22 @@
     </div>
   </div>
   <div class="nav-right">
-    <div class="auth-buttons">
-      {% if session['username'] %}
-        <div class="profile-container">
-          <div class="profile-icon">👤</div>
-          <div class="profile-details">
-            <p>Selamat datang, {{ session['fullname'] }}</p>
-            <p>Peran Anda: {{ session['role'] }}</p>
-          </div>
-          <a href="/logout" class="logout-btn">Keluar</a>
-        </div>
-      {% else %}
-        <a href="{{ url_for('login') }}" class="login-btn">Masuk</a>
-        <a href="{{ url_for('register') }}" class="login-btn">Daftar</a>
-        {% endif %}
+<div class="auth-buttons">
+  {% if session['username'] %}
+      <a href="{{ '/transaction' }}" class="transaction-btn">Transaksi</a>
+    <div class="profile-container">
+      <div class="profile-icon">👤</div>
+      <div class="profile-details">
+        <p>Selamat datang, {{ session['fullname'] }}</p>
+        <p>Peran Anda: {{ session['role'] }}</p>
+      </div>
+      <a href="/logout" class="logout-btn">Keluar</a>
     </div>
+  {% else %}
+    <a href="{{ url_for('login') }}" class="login-btn">Masuk</a>
+    <a href="{{ url_for('register') }}" class="login-btn">Daftar</a>
+  {% endif %}
+</div>
   </div>
   </nav>
 

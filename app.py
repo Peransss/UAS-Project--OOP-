@@ -1,5 +1,6 @@
 from flask import  Flask, flash, redirect, render_template, request, url_for, session
 from config import Config
+import os, pdfkit
 
 class App_Kursus:
     def __init__(self):
@@ -340,6 +341,45 @@ class App_Kursus:
             else:
                 flash("Please log in to buy courses.", "error")
                 return redirect(url_for('login'))
+
+        @self.app.route('/transaction')
+        def transaction():
+            cur = self.con.mysql.cursor()
+            try:
+                # Fetch data from purchases table with joins for user and course details
+                cur.execute('''
+                    SELECT u.fullname AS user_name, c.name AS course_name, p.purchase_date
+                    FROM purchases p
+                    JOIN users u ON p.user_id = u.id
+                    JOIN courses c ON p.course_id = c.id
+                ''')
+                data = cur.fetchall()
+            except Exception as e:
+                flash(f"Error fetching transaction data: {e}", "error")
+                return redirect(url_for('index'))
+            finally:
+                cur.close()
+
+            # Render template HTML for the report
+            rendered = render_template('transaction.html', data=data)
+
+            # Set the path to the wkhtmltopdf executable
+            config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
+
+            # Define options for wkhtmltopdf
+            options = {
+                'enable-local-file-access': True,
+                'disable-smart-shrinking': True,
+                'quiet': ''
+            }
+
+            # Generate the PDF using the configuration and options
+            pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
+
+            # Send the PDF file as a response
+            response = self.app.response_class(pdf, content_type='application/pdf')
+            response.headers['Content-Disposition'] = f'inline; filename={session.get("fullname")}-transaction.pdf'
+            return response
 
     def run(self):
         self.app.run(debug=True)

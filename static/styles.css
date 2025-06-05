@@ -810,3 +810,19 @@ form button[type="submit"]:hover {
   background-position: center;
   margin: 0 auto 10px; /* Center the logo and add spacing below */
 }
+
+.transaction-btn {
+  margin-left: 10px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.transaction-btn:hover {
+  background: #0056b3;
+}
