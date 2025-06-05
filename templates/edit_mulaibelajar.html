@@ -96,6 +96,9 @@ a:hover {
       <label for="videos">Video (JSON):</label>
       <textarea id="videos" name="videos" rows="4">{{ course[5] }}</textarea>
 
+    <label for="instructor_id">Instructor ID:</label>
+    <input type="text" id="instructor_id" name="instructor_id" value="{{ course[6] }}">
+
       <button type="submit">Simpan Perubahan</button>
     </form>
     <a href="/courses/view">← Kembali ke Daftar Mata Kuliah</a>

@@ -186,7 +186,7 @@ class App_Kursus:
 
 
                         return render_template('mulaibelajar.html', matkul=matkul_data, komentar_list=komentar_list,
-                                               id_matkul=matkul_data[0])
+                                               id_matkul=matkul_data[0], nama_ins=matkul_data[5])
                     else:
                         if user_role == "Mahasiswa":
                             cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
@@ -224,7 +224,11 @@ class App_Kursus:
                         flash("Course not found!", "error")
                         return redirect(url_for('view_courses'))
 
-                    return render_template('edit_mulaibelajar.html', course=course, course_id = course_id)
+                    if user_role == "Instruktur" and course[6] != user_id:
+                        flash("You are not authorized to edit this course!", "error")
+                        return redirect(url_for('view_courses'))
+
+                    return render_template('edit_mulaibelajar.html', course=course, course_id=course_id)
                 except Exception as e:
                     flash(f"Error fetching course: {e}", "error")
                     return redirect(url_for('view_courses'))
@@ -242,32 +246,27 @@ class App_Kursus:
 
                 cur = self.con.mysql.cursor()
                 try:
-                    cur.execute("SELECT name, description, materials, videos FROM courses WHERE id = %s", (course_id,))
-                    current_course = cur.fetchone()
+                    cur.execute("SELECT * FROM courses WHERE id = %s", (course_id,))
+                    course = cur.fetchone()
 
-                    if not current_course:
+                    if not course:
                         flash("Course not found!", "error")
                         return redirect(url_for('view_courses'))
 
-                    course_name = request.form.get('name') or current_course[0]
-                    course_description = request.form.get('description') or current_course[1]
-                    course_materials = request.form.get('materials') or current_course[2]
-                    course_videos = request.form.get('videos') or current_course[3]
-
-                    if user_role == "Instruktur":
-                        cur.execute(
-                            "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s AND instructor_id = %s",
-                            (course_name, course_description, course_materials, course_videos, course_id, user_id)
-                        )
-                    elif user_role == "Admin":
-                        cur.execute(
-                            "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s",
-                            (course_name, course_description, course_materials, course_videos, course_id)
-                        )
-                    else:
-                        flash("Permission denied!", "error")
+                    if user_role == "Instruktur" and course[6] != user_id:
+                        flash("You are not authorized to edit this course!", "error")
                         return redirect(url_for('view_courses'))
 
+                    course_name = request.form.get('name') or course[1]
+                    course_description = request.form.get('description') or course[2]
+                    course_materials = request.form.get('materials') or course[3]
+                    course_videos = request.form.get('videos') or course[4]
+                    instructor_id = request.form.get('instructor_id') or course[6]
+
+                    cur.execute(
+                        "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s, instructor_id = %s WHERE id = %s",
+                        (course_name, course_description, course_materials, course_videos, instructor_id, course_id)
+                    )
                     self.con.mysql.commit()
                     flash("Course updated successfully!", "success")
                     return redirect(url_for('view_courses'))
