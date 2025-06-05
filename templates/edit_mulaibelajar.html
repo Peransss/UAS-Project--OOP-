@@ -81,25 +81,24 @@ a:hover {
   </style>
 </head>
 <body>
-
   <div class="container">
-    <h1>Edit Mata Kuliah</h1>
-    <form method="POST">
+    <h1>Edit Mata Kuliah: id{{ course_id }}, {{ course[1] }}</h1>
+    <form method="POST" action="/courses/edit/process/{{ course_id }}">
       <label for="name">Nama Mata Kuliah:</label>
-      <input type="text" id="name" name="name" value="{{ course.name }}" required>
+      <input type="text" id="name" name="name" value="{{ course[1] }}">
 
       <label for="description">Deskripsi:</label>
-      <textarea id="description" name="description" rows="4" required>{{ course.description }}</textarea>
+      <textarea id="description" name="description" rows="4">{{ course[2] }}</textarea>
 
       <label for="materials">Materi (JSON):</label>
-      <textarea id="materials" name="materials" rows="4" required>{{ course.materials }}</textarea>
+      <textarea id="materials" name="materials" rows="4">{{ course[4] }}</textarea>
 
       <label for="videos">Video (JSON):</label>
-      <textarea id="videos" name="videos" rows="4" required>{{ course.videos }}</textarea>
+      <textarea id="videos" name="videos" rows="4">{{ course[5] }}</textarea>
 
       <button type="submit">Simpan Perubahan</button>
     </form>
-    <a href="{{ url_for('view_courses') }}">← Kembali ke Daftar Mata Kuliah</a>
+    <a href="/courses/view">← Kembali ke Daftar Mata Kuliah</a>
   </div>
 </body>
 </html>

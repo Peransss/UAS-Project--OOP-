@@ -43,7 +43,7 @@
         <a href="#materi">Materi</a>
         <a href="#video">Video</a>
         <a href="{{ url_for('index') }}" style="margin-left:auto;">Ganti Matkul</a>
-        {% if session['role'] in ['admin', 'instruktur'] %}
+        {% if session['role'] in ['Admin', 'Instruktur'] %}
           <a href="/courses/edit/{{ id_matkul }}" class="edit-btn" style="margin-left:10px;">Edit</a>
         {% endif %}
       </div>

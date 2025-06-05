@@ -188,19 +188,18 @@ class App_Kursus:
                         return render_template('mulaibelajar.html', matkul=matkul_data, komentar_list=komentar_list,
                                                id_matkul=matkul_data[0])
                     else:
-                        # Handle `view_courses` functionality
-                        if user_role == "mahasiswa":
+                        if user_role == "Mahasiswa":
                             cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
-                        elif user_role == "instruktur":
+                        elif user_role == "Instruktur":
                             cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
-                        elif user_role == "admin":
+                        elif user_role == "Admin":
                             cur.execute("SELECT * FROM courses")
                         else:
                             flash("Invalid role detected!", "error")
                             return redirect(url_for('login'))
 
                         courses = cur.fetchall()
-                        return render_template('mulaibelajar.html', courses=courses, role=user_role)
+                        return render_template('mulaibelajar.html', courses=courses)
                 except Exception as e:
                     flash(f"Error: {e}", "error")
                     return redirect(url_for('index'))
@@ -210,58 +209,68 @@ class App_Kursus:
                 flash("Please log in to view courses.", "error")
                 return redirect(url_for('login'))
 
-
-        def get_komentar_for_matkul(nama_matkul):
-            return []
-
-        @self.app.route('/courses/edit/<int:course_id>', methods=['GET', 'POST'])
-        def edit_mulaibelajar(course_id):
+        @self.app.route('/courses/edit/<int:course_id>', methods=['GET'])
+        def edit_course(course_id):
             if 'user_id' in session:
                 user_role = session.get('role')
                 user_id = session.get('user_id')
 
                 cur = self.con.mysql.cursor()
                 try:
-                    if request.method == 'POST':
-                        cur.execute("SELECT name, description, materials, videos FROM courses WHERE id = %s",
-                                    (course_id,))
-                        current_course = cur.fetchone()
+                    cur.execute("SELECT * FROM courses WHERE id = %s", (course_id,))
+                    course = cur.fetchone()
 
-                        if not current_course:
-                            flash("Course not found!", "error")
-                            return redirect(url_for('view_courses'))
-
-                        course_name = request.form.get('name', current_course[0])
-                        course_description = request.form.get('description', current_course[1])
-                        course_materials = request.form.get('materials', current_course[2])
-                        course_videos = request.form.get('videos', current_course[3])
-
-                        if user_role == "instruktur":
-                            cur.execute(
-                                "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s AND instructor_id = %s",
-                                (course_name, course_description, course_materials, course_videos, course_id, user_id)
-                            )
-                        elif user_role == "admin":
-                            cur.execute(
-                                "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s",
-                                (course_name, course_description, course_materials, course_videos, course_id)
-                            )
-                        else:
-                            flash("Permission denied!", "error")
-                            return redirect(url_for('view_courses'))
-
-                        self.con.mysql.commit()
-                        flash("Course updated successfully!", "success")
+                    if not course:
+                        flash("Course not found!", "error")
                         return redirect(url_for('view_courses'))
+
+                    return render_template('edit_mulaibelajar.html', course=course, course_id = course_id)
+                except Exception as e:
+                    flash(f"Error fetching course: {e}", "error")
+                    return redirect(url_for('view_courses'))
+                finally:
+                    cur.close()
+            else:
+                flash("Please log in to edit courses.", "error")
+                return redirect(url_for('login'))
+
+        @self.app.route('/courses/edit/process/<int:course_id>', methods=['POST'])
+        def edit_course_process(course_id):
+            if 'user_id' in session:
+                user_role = session.get('role')
+                user_id = session.get('user_id')
+
+                cur = self.con.mysql.cursor()
+                try:
+                    cur.execute("SELECT name, description, materials, videos FROM courses WHERE id = %s", (course_id,))
+                    current_course = cur.fetchone()
+
+                    if not current_course:
+                        flash("Course not found!", "error")
+                        return redirect(url_for('view_courses'))
+
+                    course_name = request.form.get('name') or current_course[0]
+                    course_description = request.form.get('description') or current_course[1]
+                    course_materials = request.form.get('materials') or current_course[2]
+                    course_videos = request.form.get('videos') or current_course[3]
+
+                    if user_role == "Instruktur":
+                        cur.execute(
+                            "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s AND instructor_id = %s",
+                            (course_name, course_description, course_materials, course_videos, course_id, user_id)
+                        )
+                    elif user_role == "Admin":
+                        cur.execute(
+                            "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s WHERE id = %s",
+                            (course_name, course_description, course_materials, course_videos, course_id)
+                        )
                     else:
-                        cur.execute("SELECT * FROM courses WHERE id = %s", (course_id,))
-                        course = cur.fetchone()
+                        flash("Permission denied!", "error")
+                        return redirect(url_for('view_courses'))
 
-                        if not course:
-                            flash("Course not found!", "error")
-                            return redirect(url_for('view_courses'))
-
-                        return render_template('edit_mulaibelajar.html', course=course)
+                    self.con.mysql.commit()
+                    flash("Course updated successfully!", "success")
+                    return redirect(url_for('view_courses'))
                 except Exception as e:
                     flash(f"Error editing course: {e}", "error")
                     return redirect(url_for('view_courses'))
@@ -292,7 +301,7 @@ class App_Kursus:
                     courses = cur.fetchall()
                     if not courses:
                         flash("No courses found!", "info")
-                    return render_template('view_courses.html', courses=courses, role=user_role)
+                    return render_template('main.html', courses=courses, role=user_role)
                 except Exception as e:
                     flash(f"Error fetching courses: {e}", "error")
                     return redirect(url_for('index'))
@@ -301,6 +310,8 @@ class App_Kursus:
             else:
                 flash("Please log in to view courses.", "error")
                 return redirect(url_for('login'))
+
+    def run(self):
         self.app.run(debug=True)
 
 if __name__ == '__main__':
