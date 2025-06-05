@@ -26,7 +26,7 @@
         <div class="profile-container">
           <div class="profile-icon">👤</div>
           <div class="profile-details">
-            <p>Selamat datang, {{ session['username'] }}!</p>
+            <p>Selamat datang, {{ session['fullname'] }}</p>
             <p>Peran Anda: {{ session['role'] }}</p>
           </div>
           <a href="/logout" class="logout-btn">Keluar</a>

@@ -66,8 +66,17 @@ class App_Kursus:
 
                     if user:
                         session['user_id'] = user[0]
+                        session['fullname'] = user[1]
                         session['username'] = user[2]
                         session['role'] = user[4]
+
+                        if session['role'] == 'admin':
+                            session['role'] = 'Admin'
+                        elif session['role'] == 'mahasiswa':
+                            session['role'] = 'Mahasiswa'
+                        else:
+                            session['role'] = 'Instruktur'
+
                         flash('Login successful!', 'success')
                         return redirect(url_for('index'))
                     else:
@@ -270,11 +279,11 @@ class App_Kursus:
 
                 cur = self.con.mysql.cursor()
                 try:
-                    if user_role == "mahasiswa":
+                    if user_role == "Mahasiswa":
                         cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
-                    elif user_role == "instruktur":
+                    elif user_role == "Instruktur":
                         cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
-                    elif user_role == "admin":
+                    elif user_role == "Admin":
                         cur.execute("SELECT * FROM courses")
                     else:
                         flash("Invalid role detected!", "error")
