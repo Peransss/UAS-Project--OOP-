@@ -154,8 +154,6 @@ class App_Kursus:
                 try:
                     if matkul:
                         matkul = matkul.strip()
-                        course_id = request.args.get('course_id')
-
                         # Cari data mata kuliah
                         cur.execute("""
                         SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
@@ -189,7 +187,7 @@ class App_Kursus:
                                 except Exception as e:
                                     flash(f"Gagal mengirim komentar: {e}", "error")
 
-                            # Ambil komentar
+                        # Ambil komentar
                         cur.execute("""
                         SELECT u.fullname, cm.comment, cm.created_at
                         FROM comments cm
@@ -199,6 +197,17 @@ class App_Kursus:
                         """, (matkul_data[0],))
                         komentar_list = cur.fetchall()
 
+                        # Check if the user has purchased the course
+                        is_locked = True
+                        if user_role in ['Instruktur', 'Admin']:
+                            is_locked = False  # Instructors and Admins can view all content
+                        else:
+                            cur.execute("""
+                                SELECT * FROM purchases WHERE user_id = %s AND course_id = %s
+                            """, (user_id, matkul_data[0]))
+                            purchase = cur.fetchone()
+                            is_locked = not purchase
+
                         return render_template(
                             'mulaibelajar.html',
                             matkul=matkul_data,
@@ -207,17 +216,17 @@ class App_Kursus:
                             nama_ins=matkul_data[5],
                             is_locked=not purchase
                         )
-
-                        # Jika tidak memilih matkul
-                    if user_role == "Mahasiswa":
-                        cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
-                    elif user_role == "Instruktur":
-                        cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
-                    elif user_role == "Admin":
-                        cur.execute("SELECT * FROM courses")
                     else:
-                        flash("Invalid role detected!", "error")
-                        return redirect(url_for('login'))
+                        # Jika tidak memilih matkul
+                        if user_role == "Mahasiswa":
+                            cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
+                        elif user_role == "Instruktur":
+                            cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
+                        elif user_role == "Admin":
+                            cur.execute("SELECT * FROM courses")
+                        else:
+                            flash("Invalid role detected!", "error")
+                            return redirect(url_for('login'))
 
                     courses = cur.fetchall()
                     return render_template('mulaibelajar.html', courses=courses)

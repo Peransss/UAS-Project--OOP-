@@ -135,5 +135,14 @@
     </div>
     <a href="{{ url_for('index') }}" style="display:inline-block;margin-top:24px;color:#007bff;text-decoration:none;">← Kembali ke Beranda</a>
   </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+  {% endwith %}
 </body>
 </html>
