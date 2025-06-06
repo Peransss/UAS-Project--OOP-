@@ -1,6 +1,7 @@
 from flask import  Flask, flash, redirect, render_template, request, url_for, session
 from config import Config
 import os, pdfkit
+import json
 
 class App_Kursus:
     def __init__(self):
@@ -167,11 +168,8 @@ class App_Kursus:
                             flash("Mata kuliah tidak ditemukan!", "error")
                             return redirect(url_for('view_or_mulaibelajar'))
 
-                        # Cek apakah user sudah beli
-                        cur.execute("""
-                        SELECT * FROM purchases WHERE user_id = %s AND course_id = %s
-                        """, (user_id, matkul_data[0]))
-                        purchase = cur.fetchone()
+                        materials_json = matkul_data[3]
+                        materi_list = json.loads(materials_json) if materials_json else []
 
                         # Tangani komentar jika POST
                         if request.method == 'POST':
@@ -213,8 +211,9 @@ class App_Kursus:
                             matkul=matkul_data,
                             komentar_list=komentar_list,
                             id_matkul=matkul_data[0],
+                            materi_list=materi_list,
                             nama_ins=matkul_data[5],
-                            is_locked=not purchase
+                            is_locked=is_locked
                         )
                     else:
                         # Jika tidak memilih matkul

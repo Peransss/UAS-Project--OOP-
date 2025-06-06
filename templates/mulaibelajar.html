@@ -44,14 +44,14 @@
         <a href="#materi">Materi</a>
         <a href="#video">Video</a>
         <a href="{{ url_for('index') }}" style="margin-left:auto;">Ganti Matkul</a>
-              {% if session['role'] == 'Mahasiswa' %}
+
 {% if session['role'] == 'Mahasiswa' and is_locked %}
 <div class="locked-logo"></div>
 <form method="POST" action="{{ url_for('buy_course', course_id=matkul[0]) }}">
   <button type="submit">Beli Course</button>
 </form>
 {% endif %}
-        {% endif %}
+
         {% if session['role'] in ['Admin', 'Instruktur'] %}
           <a href="/courses/edit/{{ id_matkul }}" class="edit-btn" style="margin-left:10px;">Edit</a>
         {% endif %}
@@ -67,30 +67,30 @@
     <p id="deskripsiContent">{{ matkul[2] if matkul else 'Deskripsi mata kuliah akan tampil di sini.' }}</p>
   {% endif %}
 </div>
-<div id="materi" class="section-box">
-  <h2>Materi Mata Kuliah</h2>
-  {% if is_locked %}
-    <p>Konten terkunci. Silakan beli course untuk mengakses materi.</p>
-  {% else %}
-    <ul class="materi-list">
-      {% for m in matkul[4] %}
-        <li class="materi-item">
-          <span class="icon">📄</span>
-          <span class="materi-item-title">
-            <a href="#" class="materi-link" data-idx="{{ loop.index0 }}" style="color:inherit;text-decoration:none;">{{ m.judul }}</a>
-          </span>
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</div>
+    <div id="materi" class="section-box">
+      <h2>Materi Mata Kuliah</h2>
+      {% if is_locked %}
+        <p>Konten terkunci. Silakan beli course untuk mengakses materi.</p>
+      {% else %}
+        <ul class="materi-list">
+          {% for m in materi_list %}
+            <li class="materi-item">
+              <span class="icon">📄</span>
+              <span class="materi-item-title">
+                <a href="{{ m.file_url }}" target="_blank" style="color:inherit;text-decoration:none;">{{ m.judul }}</a>
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
 <div id="video" class="section-box">
   <h2>Video Mata Kuliah</h2>
   {% if is_locked %}
     <p>Konten terkunci. Silakan beli course untuk mengakses video.</p>
   {% else %}
     <ul class="video-list">
-      {% for v in matkul.videos %}
+      {% for v in videos_list %}
         <li class="video-item">
           <span class="icon">🎬</span>
           <span class="video-item-title">
@@ -108,6 +108,22 @@
           <button class="close-btn" onclick="document.getElementById('videoDetail').style.display='none'">Tutup</button>
         </div>
     </div>
+
+  <script>
+  const videoData = {{ videos_json|safe }}; // kirim video JSON dari backend
+  document.querySelectorAll('.video-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const idx = this.dataset.idx;
+      const video = videoData[idx];
+      document.getElementById('videoJudul').textContent = video.judul;
+      document.getElementById('videoFrame').innerHTML = `<video controls width="100%"><source src="${video.file_url}" type="video/mp4"></video>`;
+      document.getElementById('videoDownload').href = video.file_url;
+      document.getElementById('videoDetail').style.display = 'block';
+    });
+  });
+</script>
+
     <!-- Kolom Komentar -->
 <div id="komentar" class="section-box" style="margin-top:40px;">
   <h2>Berikan Review atau Komentar</h2>
