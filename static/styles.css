@@ -216,7 +216,7 @@
       border: 2px solid #0053b8;
       outline: none;
     }
-    .hero-text button[type="submit"] {
+    #pilihanForm button[type="submit"] {
       background: linear-gradient(90deg, #0053b8 60%, #007bff 100%);
       color: #fff;
       border: none;
@@ -230,11 +230,11 @@
       box-shadow: 0 2px 8px rgba(0,83,184,0.08);
       transition: background 0.2s, transform 0.2s;
     }
-    .hero-text button[type="submit"]:hover {
+    #pilihanForm button[type="submit"]:hover {
       background: linear-gradient(90deg, #007bff 60%, #0053b8 100%);
       transform: translateY(-2px) scale(1.03);
     }
-    .hero-text .mulai-btn {
+    #pilihanForm .mulai-btn {
       background: #fff;
       color: #0053b8;
       border: 2px solid #0053b8;
@@ -246,7 +246,7 @@
       transition: background 0.2s, color 0.2s, border 0.2s;
       margin-top: 0px;
     }
-    .hero-text .mulai-btn:hover {
+    #pilihanForm .mulai-btn:hover {
       background: #0053b8;
       color: #fff;
       border: 2px solid #007bff;

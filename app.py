@@ -143,7 +143,7 @@ class App_Kursus:
             flash('You have been logged out.', 'info')
             return redirect(url_for('login'))
 
-        @self.app.route('/courses/view', methods=['GET'])
+        @self.app.route('/courses/view', methods=['GET', 'POST'])
         def view_or_mulaibelajar():
             if 'user_id' in session:
                 user_role = session.get('role')
@@ -153,56 +153,75 @@ class App_Kursus:
                 cur = self.con.mysql.cursor()
                 try:
                     if matkul:
-                        # Check if the user has purchased the course
-                        cur.execute("""
-                            SELECT * FROM purchases WHERE user_id = %s AND course_id = (
-                                SELECT id FROM courses WHERE name = %s
-                            )
-                        """, (user_id, matkul))
-                        purchase = cur.fetchone()
+                        matkul = matkul.strip()
+                        course_id = request.args.get('course_id')
 
-                        # Fetch course data
+                        # Cari data mata kuliah
                         cur.execute("""
-                            SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
-                            FROM courses c
-                            LEFT JOIN users u ON c.instructor_id = u.id
-                            WHERE c.name = %s
+                        SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
+                        FROM courses c
+                        LEFT JOIN users u ON c.instructor_id = u.id
+                        WHERE c.name = %s
                         """, (matkul,))
                         matkul_data = cur.fetchone()
 
-                        # Fetch comments
+                        if not matkul_data:
+                            flash("Mata kuliah tidak ditemukan!", "error")
+                            return redirect(url_for('view_or_mulaibelajar'))
+
+                        # Cek apakah user sudah beli
                         cur.execute("""
-                            SELECT u.fullname, cm.comment, cm.created_at
-                            FROM comments cm
-                            JOIN users u ON cm.user_id = u.id
-                            WHERE cm.course_id = %s
-                            ORDER BY cm.created_at DESC
+                        SELECT * FROM purchases WHERE user_id = %s AND course_id = %s
+                        """, (user_id, matkul_data[0]))
+                        purchase = cur.fetchone()
+
+                        # Tangani komentar jika POST
+                        if request.method == 'POST':
+                            komentar = request.form.get('comment')
+                            if komentar:
+                                try:
+                                    cur.execute("""
+                                    INSERT INTO comments (course_id, user_id, comment)
+                                    VALUES (%s, %s, %s)
+                                    """, (matkul_data[0], user_id, komentar))
+                                    self.con.mysql.commit()
+                                    flash("Komentar berhasil dikirim", "success")
+                                except Exception as e:
+                                    flash(f"Gagal mengirim komentar: {e}", "error")
+
+                            # Ambil komentar
+                        cur.execute("""
+                        SELECT u.fullname, cm.comment, cm.created_at
+                        FROM comments cm
+                        JOIN users u ON cm.user_id = u.id
+                        WHERE cm.course_id = %s
+                        ORDER BY cm.created_at DESC
                         """, (matkul_data[0],))
                         komentar_list = cur.fetchall()
 
-                        # Render the page with locked content if not purchased
                         return render_template(
                             'mulaibelajar.html',
                             matkul=matkul_data,
                             komentar_list=komentar_list,
                             id_matkul=matkul_data[0],
                             nama_ins=matkul_data[5],
-                            is_locked=not purchase  # Pass locked status to the template
+                            is_locked=not purchase
                         )
-                    else:
-                        # Display list of courses
-                        if user_role == "Mahasiswa":
-                            cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
-                        elif user_role == "Instruktur":
-                            cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
-                        elif user_role == "Admin":
-                            cur.execute("SELECT * FROM courses")
-                        else:
-                            flash("Invalid role detected!", "error")
-                            return redirect(url_for('login'))
 
-                        courses = cur.fetchall()
-                        return render_template('mulaibelajar.html', courses=courses)
+                        # Jika tidak memilih matkul
+                    if user_role == "Mahasiswa":
+                        cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
+                    elif user_role == "Instruktur":
+                        cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (user_id,))
+                    elif user_role == "Admin":
+                        cur.execute("SELECT * FROM courses")
+                    else:
+                        flash("Invalid role detected!", "error")
+                        return redirect(url_for('login'))
+
+                    courses = cur.fetchall()
+                    return render_template('mulaibelajar.html', courses=courses)
+
                 except Exception as e:
                     flash(f"Error: {e}", "error")
                     return redirect(url_for('index'))

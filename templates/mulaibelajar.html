@@ -109,24 +109,28 @@
         </div>
     </div>
     <!-- Kolom Komentar -->
-    <div id="komentar" class="section-box" style="margin-top:40px;">
-      <h2>Berikan Review atau Komentar</h2>
-      <form method="POST" action="">
-        <textarea name="isi_komentar" rows="4" style="width:100%;border-radius:8px;border:1px solid #ccc;padding:10px;" placeholder="Tulis komentar atau review Anda di sini..." required></textarea>
-        <br>
-        <button type="submit">Kirim</button>
-      </form>
-      <div style="margin-top:24px;">
-        <h3 style="font-size:1.1rem;">Komentar Pengguna:</h3>
-        {% if komentar_list %}
-        {% else %}
-        {% endif %}
-          <p style="color:#888;">Belum ada komentar.</p>
-          <ul>
-            {% for k in komentar_list %}
-              <li>{{ k }}</li>
+<div id="komentar" class="section-box" style="margin-top:40px;">
+  <h2>Berikan Review atau Komentar</h2>
+  <form method="POST" action="">
+    <textarea name="comment" rows="4" style="width:90%;border-radius:8px;border:1px solid #ccc;padding:10px;" placeholder="Tulis komentar atau review Anda di sini..." required></textarea>
+    <br>
+    <button type="submit">Kirim</button>
+  </form>
+
+  <div style="margin-top:24px;">
+    <h3 style="font-size:1.1rem;">Komentar Pengguna:</h3>
+    {% if komentar_list %}
+      <ul>
+        {% for k in komentar_list %}
+              <li style="margin-bottom:12px;">
+                <strong>{{ k[0] }}</strong> ({{ k[2].strftime('%d-%m-%Y %H:%M') }}):<br>
+                {{ k[1] }}
+              </li>
             {% endfor %}
           </ul>
+        {% else %}
+          <p style="color:#888;">Belum ada komentar.</p>
+        {% endif %}
       </div>
     </div>
     <a href="{{ url_for('index') }}" style="display:inline-block;margin-top:24px;color:#007bff;text-decoration:none;">← Kembali ke Beranda</a>

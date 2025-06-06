@@ -55,7 +55,7 @@
   <div class="hero-text">
     <h1>Informatika Jadi Lebih Mematikan</h1>
     <p>Dapatkan akses ke ribuan video pembelajaran, latihan soal, dan mentor terbaik hanya di Inforku.</p>
-    <form id="pilihanForm" method="get" action="/courses/view">
+    <form id="pilihanForm" method="get" action="{{ url_for('view_or_mulaibelajar') }}">
       <div class="custom-form-group">
         <label for="semester">Semester</label>
         <select id="semester" name="semester">
