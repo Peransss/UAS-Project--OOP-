@@ -169,7 +169,9 @@ class App_Kursus:
                             return redirect(url_for('view_or_mulaibelajar'))
 
                         materials_json = matkul_data[3]
+                        videos_json = matkul_data[4]
                         materi_list = json.loads(materials_json) if materials_json else []
+                        videos_list = json.loads(videos_json) if videos_json else []
 
                         # Tangani komentar jika POST
                         if request.method == 'POST':
@@ -212,8 +214,10 @@ class App_Kursus:
                             komentar_list=komentar_list,
                             id_matkul=matkul_data[0],
                             materi_list=materi_list,
+                            videos_list=videos_list,
                             nama_ins=matkul_data[5],
-                            is_locked=is_locked
+                            is_locked=is_locked,
+                            videos_json = json.dumps(videos_list)
                         )
                     else:
                         # Jika tidak memilih matkul
