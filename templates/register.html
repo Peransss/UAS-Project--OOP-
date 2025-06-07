@@ -20,25 +20,23 @@
       </div>
     </div>
   </nav>
-  <div class="register-container">
-    <h2>Daftar Akun Inforku</h2>
-    <div class="error-msg" id="registerError"></div>
-    <form action="process" id="registerForm" method="post" autocomplete="off">
-      <div class="form-group">
+  <div class="auth-section">
+    <div class="auth-card">
+      <h2>Daftar Akun Inforku</h2>
+      <div class="error-msg" id="registerError"></div>
+      <form action="process" id="registerForm" method="post" autocomplete="off">
         <label for="regName">Nama Lengkap</label>
         <input type="text" id="regName" name="full_name" required>
-      </div>
-      <div class="form-group">
-        <label for="regEmail">Username</label>
+        <label for="regUsername">Username</label>
         <input type="text" id="regUsername" name="username" required>
-      </div>
-      <div class="form-group">
         <label for="regPassword">Kata Sandi</label>
         <input type="password" id="regPassword" name="password" required>
+        <button type="submit">Daftar</button>
+      </form>
+      <div class="switch-link">
+        Sudah punya akun? <a href="/login">Masuk</a>
       </div>
-      <button type="submit" class="register-btn">Daftar</button>
-    </form>
-    <a href="/login" class="login-link">Sudah punya akun? Masuk</a>
+    </div>
   </div>
   <!-- <script>
     // Simulasi register sederhana (tanpa backend)

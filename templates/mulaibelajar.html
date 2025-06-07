@@ -47,8 +47,10 @@
 
 {% if session['role'] == 'Mahasiswa' and is_locked %}
 <div class="locked-logo"></div>
-<form method="POST" action="{{ url_for('buy_course', course_id=matkul[0]) }}">
-  <button type="submit">Beli Course</button>
+<form method="POST" action="{{ url_for('buy_course', course_id=matkul[0]) }}" style="display:inline-block;">
+  <button type="submit" class="buy-btn">
+    <span class="buy-icon">🛒</span> Beli Course
+  </button>
 </form>
 {% endif %}
 

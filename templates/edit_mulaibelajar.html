@@ -78,6 +78,46 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+  color: #fff;
+  border: none;
+  padding: 16px 44px;
+  border-radius: 16px;
+  font-size: 1.22rem;
+  font-weight: 900;
+  cursor: pointer;
+  margin: 24px 0 0 0;
+  box-shadow: 0 6px 28px rgba(67,233,123,0.18), 0 2px 8px #b3d1ff;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.8px;
+  position: relative;
+  overflow: hidden;
+  outline: none;
+}
+.buy-btn .buy-icon {
+  font-size: 1.5em;
+  margin-right: 8px;
+  filter: drop-shadow(0 2px 4px #b3d1ff);
+}
+.buy-btn::after {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: linear-gradient(120deg,rgba(255,255,255,0.13) 0%,rgba(255,255,255,0.04) 100%);
+  opacity: 0.7;
+  pointer-events: none;
+  border-radius: 16px;
+}
+.buy-btn:hover, .buy-btn:focus {
+  background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 40px #38f9d7, 0 2px 16px #b3d1ff;
+}
   </style>
 </head>
 <body>
