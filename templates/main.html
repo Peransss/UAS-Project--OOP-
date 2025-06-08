@@ -47,7 +47,14 @@
         </ul>
     {% endif %}
 {% endwith %}
-  <!-- Hero Section -->
+  <script>
+  setTimeout(() => {
+    const flashMessages = document.querySelectorAll('.flashes li');
+    flashMessages.forEach(message => {
+      message.style.display = 'none';
+    });
+  }, 4000);
+</script>
   <div class="hero-text">
     <h1>Informatika Jadi Lebih Mematikan</h1>
     <p>Dapatkan akses ke puluhan video pembelajaran, latihan soal, dan mentor terbaik hanya di Inforku.</p>
@@ -62,7 +69,6 @@
       <div class="custom-form-group">
         <label for="matkul">Pilih Mata Kuliah</label>
         <select id="matkul" name="matkul">
-          <!-- Akan diisi oleh JS -->
         </select>
       </div>
       <button type="submit" class="mulai-btn">Mulai Belajar</button>

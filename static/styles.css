@@ -872,3 +872,51 @@ body {
 .transaction-btn:hover {
   background-color: #0056b3; /* Darker shade for hover effect */
 }
+
+/*flash login*/
+.flash-alert {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 2000;
+  text-align: center;
+  max-width: 90%;
+}
+
+.flash-alert p {
+  padding: 16px 24px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.flash-success {
+  background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+  border-left: 6px solid #1de9b6;
+}
+
+.flash-error {
+  background: linear-gradient(90deg, #f85032 0%, #e73827 100%);
+  border-left: 6px solid #d32f2f;
+}
+
+.flash-info {
+  background: linear-gradient(90deg, #2196f3 0%, #6dd5ed 100%);
+  border-left: 6px solid #1976d2;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
