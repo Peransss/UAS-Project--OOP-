@@ -155,7 +155,6 @@ class App_Kursus:
                 try:
                     if matkul:
                         matkul = matkul.strip()
-                        # Cari data mata kuliah
                         cur.execute("""
                         SELECT c.id, c.name, c.description, c.materials, c.videos, u.fullname AS instructor_name
                         FROM courses c
@@ -173,7 +172,6 @@ class App_Kursus:
                         materi_list = json.loads(materials_json) if materials_json else []
                         videos_list = json.loads(videos_json) if videos_json else []
 
-                        # Tangani komentar jika POST
                         if request.method == 'POST':
                             komentar = request.form.get('comment')
                             if komentar:
@@ -187,7 +185,6 @@ class App_Kursus:
                                 except Exception as e:
                                     flash(f"Gagal mengirim komentar: {e}", "error")
 
-                        # Ambil komentar
                         cur.execute("""
                         SELECT u.fullname, cm.comment, cm.created_at
                         FROM comments cm
@@ -197,10 +194,9 @@ class App_Kursus:
                         """, (matkul_data[0],))
                         komentar_list = cur.fetchall()
 
-                        # Check if the user has purchased the course
                         is_locked = True
                         if user_role in ['Instruktur', 'Admin']:
-                            is_locked = False  # Instructors and Admins can view all content
+                            is_locked = False
                         else:
                             cur.execute("""
                                 SELECT * FROM purchases WHERE user_id = %s AND course_id = %s
@@ -220,7 +216,6 @@ class App_Kursus:
                             videos_json = json.dumps(videos_list)
                         )
                     else:
-                        # Jika tidak memilih matkul
                         if user_role == "Mahasiswa":
                             cur.execute("SELECT * FROM courses WHERE visibility = 'public'")
                         elif user_role == "Instruktur":

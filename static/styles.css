@@ -12,7 +12,6 @@ body {
   color: #222;
 }
 
-/* Navbar */
 .navbar {
   background: #fff;
   box-shadow: 0 2px 12px rgba(0,83,184,0.10);
@@ -90,7 +89,6 @@ body {
   box-shadow: 0 4px 16px rgba(0,83,184,0.13);
 }
 
-/* Flash message */
 .flashes {
   list-style: none;
   padding: 0;
@@ -144,7 +142,6 @@ body {
   to { opacity: 1; transform: translateY(0);}
 }
 
-/* Hero Section */
 .hero-text {
   background: #fff;
   padding: 48px 36px 36px 36px;
@@ -169,7 +166,6 @@ body {
   font-weight: 500;
 }
 
-/* Form */
 .custom-form-group {
   margin-bottom: 22px;
   text-align: left;
@@ -214,7 +210,6 @@ body {
   transform: translateY(-2px) scale(1.04);
 }
 
-/* Container */
 .container {
   max-width: 1100px;
   min-height: 96vh;
@@ -226,7 +221,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Main Title */
 #mainTitle {
   font-size: 2.2rem;
   font-weight: 900;
@@ -236,7 +230,6 @@ body {
   text-align: center;
 }
 
-/* Matkul Box */
 .matkul-box {
   margin: 32px auto 28px auto;
   padding: 28px 22px;
@@ -254,7 +247,6 @@ body {
   margin-bottom: 12px;
 }
 
-/* Matkul Navigation */
 .matkul-nav {
   display: flex;
   justify-content: flex-start;
@@ -288,7 +280,6 @@ body {
   font-weight: 700;
 }
 
-/* Section Box */
 .section-box {
   margin: 36px 0;
   padding: 30px 26px;
@@ -308,7 +299,6 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* Materi & Video List */
 .materi-list,
 .video-list {
   list-style: none;
@@ -352,7 +342,6 @@ body {
   display: inline;
 }
 
-/* Detail Popups */
 #materiDetail,
 #videoDetail {
   display: none;
@@ -463,7 +452,6 @@ body {
   border-left: 4px solid #007bff;
 }
 
-/* Profile & Logout */
 .profile-container {
   position: relative;
   display: inline-flex;
@@ -524,7 +512,6 @@ body {
   background: #D43D64;
 }
 
-/* FITUR & TESTIMONI CARD */
 .fitur-section {
   max-width: 1200px;
   margin: 64px auto 0 auto;
@@ -648,7 +635,7 @@ body {
   font-weight: 500;
 }
 
-/* Animasi Slide In dan Fade In */
+
 @keyframes slideInUp {
   from {
     opacity: 0;
@@ -664,7 +651,7 @@ body {
   to { opacity: 1; }
 }
 
-/* Efek animasi dan warna pada judul utama, subjudul, dan judul section */
+
 .hero-text h1,
 #mainTitle,
 .fitur-title,
@@ -672,10 +659,10 @@ body {
   animation: slideInUp 1s cubic-bezier(.23,1.01,.32,1) both;
   color: #0053b8;
   text-shadow: 0 4px 24px #b3d1ff, 0 2px 8px #e3f0ff;
-  /* Jika ingin efek gradasi, gunakan warna solid utama saja agar kompatibel */
+
 }
 
-/* Efek fade dan bayangan pada paragraf hero dan nama testimoni */
+
 .hero-text p,
 .fitur-card h3,
 .testimoni-card .name {
@@ -683,7 +670,7 @@ body {
   text-shadow: 0 2px 8px #e3f0ff;
 }
 
-/* Efek animasi slide pada card dan section utama */
+
 .fitur-card,
 .testimoni-card,
 .section-box,
@@ -691,14 +678,13 @@ body {
   animation: slideInUp 1.1s cubic-bezier(.23,1.01,.32,1) both;
 }
 
-/* Efek warna dan bayangan pada logo navbar */
+
 .navbar .logo {
   color: #0053b8;
   text-shadow: 0 4px 24px #b3d1ff, 0 2px 8px #e3f0ff;
   animation: fadeInText 1.2s both;
 }
 
-/* LOGIN & REGISTER FORM */
 .auth-section {
   display: flex;
   justify-content: center;
@@ -745,10 +731,10 @@ body {
 .auth-card input[type="text"],
 .auth-card input[type="email"],
 .auth-card input[type="password"] {
-  padding: 16px 20px; /* Increase padding for larger input boxes */
+  padding: 16px 20px;
   border-radius: 10px;
   border: 1.5px solid #b0c4de;
-  font-size: 1.2rem; /* Slightly larger font size */
+  font-size: 1.2rem;
   background: #f7faff;
   transition: border 0.2s, box-shadow 0.2s;
   margin-bottom: 2px;
@@ -806,7 +792,6 @@ body {
   text-decoration: underline;
 }
 
-/* Responsive for auth card */
 @media (max-width: 600px) {
   .auth-card {
     padding: 24px 8vw;
@@ -860,17 +845,17 @@ body {
 .transaction-btn {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #007bff; /* Matches the theme's primary color */
-  color: #fff; /* White text for contrast */
-  text-decoration: none; /* Remove underline */
-  border-radius: 8px; /* Rounded corners */
-  font-size: 16px; /* Adjust font size */
-  font-weight: bold; /* Make text bold */
-  transition: background-color 0.3s ease; /* Smooth hover effect */
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .transaction-btn:hover {
-  background-color: #0056b3; /* Darker shade for hover effect */
+  background-color: #0056b3;
 }
 
 /*flash login*/
