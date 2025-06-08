@@ -96,6 +96,8 @@ class AuthController(Session):
 class CourseController(Session):
     #ENKAPSULASI terkait kursus
     #INHERITANCE dari Session untuk akses database
+
+    #POLYMORPHISM banyak bentuk sesuai peran user
     def get_courses_by_role(self, user_role, user_id):
         cur = self.mysql.cursor()
         if user_role == "Mahasiswa":
