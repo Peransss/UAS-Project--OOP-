@@ -18,10 +18,9 @@ class Session:
             }
         return None
 
-
 class AuthController(Session):
     #ENKAPSULASI semua terkait authtentication user
-    #INHERITANCE dari Session untuk akses database
+    #INHERITANCE session
     def login(self):
         if request.method == 'POST':
             username = request.form['username']
@@ -92,10 +91,9 @@ class AuthController(Session):
         flash('You have been logged out.', 'info')
         return redirect(url_for('login'))
 
-
 class CourseController(Session):
     #ENKAPSULASI terkait kursus
-    #INHERITANCE dari Session untuk akses database
+    #INHERITANCE session
 
     #POLYMORPHISM banyak bentuk sesuai peran user
     def get_courses_by_role(self, user_role, user_id):
@@ -220,7 +218,6 @@ class CourseController(Session):
             cur.close()
         return redirect(url_for('view_courses'))
 
-
 class TransactionController(Session):
     # ENKAPSULASI terkait transaksi
     # INHERITANCE dari Session untuk akses database
@@ -262,8 +259,6 @@ class TransactionController(Session):
         except Exception as e:
             flash(f"Could not generate PDF: {e}", "error")
             return "PDF generation failed."
-
-
 
 class App_Kursus:
     def __init__(self):
