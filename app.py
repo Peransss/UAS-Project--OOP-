@@ -194,6 +194,51 @@ class CourseController(Session):
         finally:
             cur.close()
 
+    def edit_course(self, course_id):
+        if 'user_id' not in session:
+            flash("Silakan login untuk mengubah kursus.", "error")
+            return redirect(url_for('login'))
+
+        user_role = session.get('role')
+        user_id = session.get('user_id')
+
+        cur = self.con.mysql.cursor()
+        try:
+            cur.execute("SELECT * FROM courses WHERE id = %s", (course_id,))
+            course = cur.fetchone()
+
+            if not course:
+                flash("Kursus tidak ditemukan!", "error")
+                return redirect(url_for('view_courses'))
+
+            if user_role == "Instruktur" and course[6] != user_id:
+                flash("You are not authorized to edit this course!", "error")
+                return redirect(url_for('view_courses'))
+
+            if request.method == 'POST':
+                course_name = request.form.get('name') or course[1]
+                course_description = request.form.get('description') or course[2]
+                course_materials = request.form.get('materials') or course[3]
+                course_videos = request.form.get('videos') or course[4]
+                instructor_id = request.form.get('instructor_id') or course[6]
+
+                cur.execute(
+                    "UPDATE courses SET name = %s, description = %s, materials = %s, videos = %s, instructor_id = %s WHERE id = %s",
+                    (course_name, course_description, course_materials, course_videos, instructor_id, course_id)
+                )
+                self.con.mysql.commit()
+
+                flash("Kursus berhasil diperbarui!", "success")
+                return redirect(url_for('view_courses'))
+
+            return render_template('edit_mulaibelajar.html', course=course)
+
+        except Exception as e:
+            flash(f"Terjadi kesalahan: {e}", "error")
+            return redirect(url_for('view_courses'))
+        finally:
+            cur.close()
+
     def buy_course(self, course_id):
         user_session = self.get_user_session()
         if not user_session:
@@ -296,6 +341,9 @@ class App_Kursus:
 
         @self.app.route('/courses/view', methods=['GET', 'POST'])
         def view_or_mulaibelajar(): return self.course_controller.view_or_manage_single_course()
+
+        @self.app.route('/courses/edit/<int:course_id>', methods=['GET', 'POST'])
+        def edit_course(course_id): return self.course_controller.edit_course(course_id)
 
         @self.app.route('/view_courses', methods=['GET'])
         def view_courses(): return self.course_controller.view_all_courses()
